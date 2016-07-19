@@ -145,11 +145,148 @@ class ExampleTest extends TestCase
 		echo 'end';
 	}
 
+    public function testInsertDayilyData(){
+        // $this->markTestSkipped('geting code spec is ok');
+
+        $crawl = new \App\Library\Crawl();
+
+        DB::table('stCode')->truncate();
+        DB::table('stDayData')->truncate();
+
+        $code1 = new Code;
+        $code1->cdNumber = '051360';
+        $code1->cdName = '토비스';
+        // $code1->cdLastUpdate = '';
+        $code1->save();
+
+        $code = Code::find(1);
+        $crawl = new Crawl($code);
+        $result = $crawl->getCodeData();
+        
+        foreach ($result as $key => $value) {
+            DayData::create(array(
+                'stCodeIdx'=>$value['codeIdx']
+                ,'ddDate'=>$value['ddDate']
+                ,'ddJongGa'=>$value['ddJongGa']
+                ,'ddJulIlBi'=>$value['ddJulIlBi']
+                ,'ddDeunRakPok'=>$value['ddDeunRakPok']
+                ,'ddGeRaeRyang'=>$value['ddGeRaeRyang']
+                ,'ddSunMaeMae'=>$value['ddSunMaeMae']
+                ,'ddForSunMaeMae'=>$value['ddForSunMaeMae']
+                ,'ddForBoYuJuSu'=>$value['ddForBoYuJuSu']
+                ,'ddforBoYuYul'=>$value['ddforBoYuYul']
+            ));
+        }
+        $cnt = DayData::all()->count();
+        echo $cnt.'<==';
+        $this->assertEquals(true,$cnt > 1);
+
+        ####안되는 중
+    }
+
+    public function testCheckDup(){
+        $this->markTestSkipped('geting code spec is ok');
+        $crawl = new \App\Library\Crawl();
+
+        DB::table('stCode')->truncate();
+        DB::table('stDayData')->truncate();
+
+        $code1 = new Code;
+        $code1->cdNumber = '051360';
+        $code1->cdName = '토비스';
+        $code1->cdLastUpdate = '160701';
+        $code1->save();
+
+        $code2 = new Code;
+        $code2->cdNumber = '005930';
+        $code2->cdName = '삼성전자';
+        $code2->cdLastUpdate = '160801';
+        $code2->save();
+
+        $code3 = new Code;
+        $code3->cdNumber = '000660';
+        $code3->cdName = 'SK하이닉스';
+        $code3->cdLastUpdate = '';
+        $code3->save();
+
+        $code4 = new Code;
+        $code4->cdNumber = '066830';
+        $code4->cdName = '제노텍';
+        $code4->cdLastUpdate = '140101';
+        $code4->save();
+
+        $lists = Code::all()->toArray();
+        $this->assertEquals(4,count($lists));
+
+        DB::table('stCode')->truncate();
+        DB::table('stDayData')->truncate();
+
+        $code1 = new Code;
+        $code1->cdNumber = '051360';
+        $code1->cdName = '토비스';
+        $code1->cdLastUpdate = '160712';
+        $code1->save();
+
+        $code = Code::find(1);
+        $this->assertEquals(true,is_object($code));
+        $this->assertEquals('App\\Code',get_class($code));
+        
+        $crawl = new Crawl($code);
+        $this->assertEquals($code1->cdNumber,$crawl->currentCode);
+        $this->assertEquals($code->id,$crawl->currentCodeIdx);
+        $this->assertEquals($code1->cdName,$crawl->currentName);
+        $this->assertEquals($code1->cdLastUpdate,$crawl->currentLastUpdate);
+
+        $result = $crawl->getCodeData();
+        print_r($result);
+        $lastestDate = $crawl->lastestDate;
+        print_r($code->cdLastUpdate.' => '.$crawl->lastestDate.' ~ '.$crawl->oldestDate);
+        $this->assertEquals(true,$crawl->lastestDate > $code->cdLastUpdate);
+        $this->assertEquals(true,$crawl->oldestDate > $code->cdLastUpdate);
+        $code->cdLastUpdate = $crawl->lastestDate;
+        $code->save();
+
+        $code = Code::find(1);
+        $this->assertEquals(true,$code->cdLastUpdate == $crawl->lastestDate);
+    }
+
 	public function testGetCode(){
 		$this->markTestSkipped('geting code spec is ok');
-		$crawl = new \App\Library\Crawl('051360');
-		// echo $crawl->targetDate; //160118
-		$data = $crawl->getCodeData();
-		// print_r($data);
+
+		$crawl = new \App\Library\Crawl();
+
+        # Code::where('id','>','0')->delete();
+        // DB::table('stCode')->truncate();
+        // $code1 = new Code;
+        // $code1->cdNumber = '051360';
+        // $code1->cdName = '토비스';
+        // $code1->save();
+
+        // $code2 = new Code;
+        // $code2->cdNumber = '005930';
+        // $code2->cdName = '삼성전자';
+        // $code2->save();
+        $lists = Code::all()->toArray();
+        // print_r($lists);
+        $this->assertEquals(2,count($lists));
+        // echo count($lists).'<==';
+
+        $results = [];
+        foreach($lists as $item){
+            $crawl->currentCode = $item['cdNumber'];
+            $crawl->currentPage = 1;
+            $crawl->currentCodeIdx = $item['id'];
+            $results[] = $crawl->getCodeData();
+        }
+        // print_r($results);
+        $this->assertEquals(2,count($results));
+
+        #DB::table('stCode')->truncate();
+        // Code::where('id','>','0')->delete();
+        // $lists = Code::all()->toArray();
+        // $this->assertEquals(0,count($lists));
+		
+
+
 	}
 }

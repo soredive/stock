@@ -15,6 +15,7 @@ class Code extends Model //implements CodeInterface
 {
 	protected $table = 'stCode';
 	protected $fillable = array('cdNumber','cdName');
+	// 할당 차단 필드
 	protected $guarded = array('id');
 	protected $casts = [
 	    // 'is_admin' => 'boolean',

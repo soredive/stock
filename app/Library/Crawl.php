@@ -20,7 +20,13 @@ class Crawl implements CrawlInterface{
 	public $curl;
 
 	public $currentCode;
+	public $currentCodeIdx;
+	public $currentName;
+	public $currentLastUpdate = '';
 	public $currentPage;
+
+	public $lastestDate;
+	public $oldestDate;
 
 	public $processData;
 
@@ -34,9 +40,16 @@ class Crawl implements CrawlInterface{
 	public $chkDone = false;
 	public $going = true;
 	public $goCnt = 0;
+	public $maxTryCnt = 20;
 	
 	public function __construct($code = null, $page = 1){
-		if(isset($code)) $this->currentCode = $code;
+		if(isset($code)){
+			if(is_object($code) && 'App\\Code' == get_class($code)){
+				$this->fromCode($code);
+			}else{
+				$this->currentCode = $code;		
+			}
+		} 
 		if(isset($page)) $this->currentPage = $page;
 
 		$this->client = new Client();
@@ -49,18 +62,30 @@ class Crawl implements CrawlInterface{
 		$this->init();
 	}
 
+	public function fromCode($code){
+		$this->currentCode = $code->cdNumber;
+		$this->currentCodeIdx = $code->id;
+		$this->currentName = $code->cdName;
+		$this->currentLastUpdate = $code->cdLastUpdate;
+	}
+
 	public function getCodeData($code = null, $page = null){
-		if($code) 
-			$this->currentCode = $code;
+		if($code) {
+			if(is_object($code) && 'App\\Code' == get_class($code)){
+				$this->fromCode($code);
+			}else{
+				$this->currentCode = $code;		
+			}
+		}
 		if($page) 
 			$this->currentPage = $page;
 		else 
-			$page = 1;
+			$this->currentPage = 1;
 		$this->goCnt = 0;
 		$result = [];
 		$this->chkDone = false;
 
-		while($this->chkDone == false && $this->goCnt < 20){
+		while($this->chkDone == false && $this->goCnt < $this->maxTryCnt){
 			$url = $this->getUrl();
 			$pageData = $this->getHtml();
 			$result = array_merge($result, $pageData);
@@ -71,10 +96,14 @@ class Crawl implements CrawlInterface{
 	}
 
 	public function checkDone($date){
+
 		if(strlen($date) != 6 || strlen($this->targetDate) != 6){
 			throw new \Exception('date calc is failed');
 		}
-		return $date < $this->targetDate;
+		if($this->currentLastUpdate && $date <= $this->currentLastUpdate){
+			return true; // 날자가 마지막 수정일보다 작거나 같으면 끝내라
+		}
+		return $date < $this->targetDate; // true=> 이제 끝내라
 	}
 
 	public function getMonthDate(){
@@ -110,9 +139,16 @@ class Crawl implements CrawlInterface{
 		$this->tempData = [];
 		$this->chkDone = false;
 		$tr->each(function(\Symfony\Component\DomCrawler\Crawler $curTr, $idx){
+			if($this->chkDone){
+				return false;
+			}
 			$spans = $curTr->filter('span');
 
+			/* TODO ORM모델로 하려다가 퍼포먼스가 일반 배열이 편할 것 같아서 plain object 로 할거냐 모델로 할거냐 배열로 할거냐.... 나중에 변경해도 괜찮을 듯 */
+			// for db insert info
 			$data['code'] = $this->currentCode;
+			$data['codeIdx'] = $this->currentCodeIdx;
+
             $data['ddDate'] = $this->processData->Row0($spans->eq(0)->text());
             $data['ddJongGa'] = $this->processData->Row1($spans->eq(1)->text());
             $data['ddJulIlBi'] = $this->processData->Row2($spans->eq(2)->text(), $spans->eq(2)->attr('class'));
@@ -127,8 +163,12 @@ class Crawl implements CrawlInterface{
 
             if($this->checkDone($data['ddDate'])){
             	$this->chkDone = true;
-            	echo 'Done!!!'.$data['ddDate'].'<--';
+            	// echo 'Done!!!'.$data['ddDate'].'<--';
             }else{
+            	if($this->lastestDate < $data['ddDate']){
+            		$this->lastestDate = $data['ddDate'];
+            	}
+           		$this->oldestDate = $data['ddDate'];
             	$this->tempData[] = $data;	
             }
 		});
