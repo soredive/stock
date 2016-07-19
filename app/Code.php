@@ -14,15 +14,33 @@ interface CodeInterface {
 class Code extends Model //implements CodeInterface 
 {
 	protected $table = 'stCode';
-	protected $fillable = array('cdNumber','cdName');
+	protected $fillable = array('cdNumber','cdName','cdLastUpdate','cdOldUpdate');
 	// 할당 차단 필드
 	protected $guarded = array('id');
 	protected $casts = [
 	    // 'is_admin' => 'boolean',
 	];
 
-    //
-    public $allCode = [];
+	public function saveUpdateDate($oldDate=null, $lastDate=null){
+		$changed = false;
+		if($oldDate){
+			if(!$this->cdOldUpdate || $oldDate < $this->cdOldUpdate){
+				$this->cdOldUpdate = $oldDate;
+				$changed = true;
+			}
+		}
+		if($lastDate){
+			if(!$this->cdLastUpdate || $lastDate > $this->cdLastUpdate){
+				$this->cdLastUpdate = $lastDate;
+				$changed = true;
+			}
+		}
+		if($changed){
+			$this->save();
+			return true;
+		}
+		return false;
+	}
 
     public function dayData(){
     	return $this->hasMany('App\DayData', 'stCodeIdx', 'id');
@@ -32,14 +50,5 @@ class Code extends Model //implements CodeInterface
 		self::firstOrCreate([
             "cdNumber"=>$code
         ]);
-	}
-	public static function remove($code){
-		self::where('cdNumber','=',$code)->delete();
-	}
-	public static function lists(){
-		return self::get()->toArray();
-	}
-	public function edit($idx,$code){
-		
 	}
 }

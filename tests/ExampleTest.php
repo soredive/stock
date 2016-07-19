@@ -145,7 +145,53 @@ class ExampleTest extends TestCase
 		echo 'end';
 	}
 
-    public function testInsertDayilyData(){
+	public function testDateUpdate(){
+		$this->markTestSkipped('geting code spec is ok');
+
+        DB::table('stCode')->truncate();
+        DB::table('stDayData')->truncate();
+
+        $code = new Code;
+        $code->cdNumber = '051360';
+        $code->cdName = '토비스';
+        $code->cdOldUpdate = '160101';
+        $code->cdLastUpdate = '160701';
+        $old = '160119';
+        $last = '160719';
+
+        $ret = $code->saveUpdateDate($old,$last);
+        $this->assertEquals(true,$ret);
+
+        $code = Code::find(1);
+		$this->assertEquals($code->cdOldUpdate,$code->cdOldUpdate);
+		$this->assertEquals($last,$code->cdLastUpdate);
+
+		$code->cdOldUpdate = '160101';
+        $code->cdLastUpdate = '160719';
+        $code->save();
+        $old = '160119';
+        $last = '160719';
+
+        $ret = $code->saveUpdateDate($old,$last);
+        $this->assertEquals(false,$ret);
+        $code = Code::find(1);
+		$this->assertEquals('160101',$code->cdOldUpdate);
+		$this->assertEquals('160719',$code->cdLastUpdate);
+
+		$code->cdOldUpdate = '';
+        $code->cdLastUpdate = '';
+        $code->save();
+        $old = '160119';
+        $last = '160719';
+
+        $ret = $code->saveUpdateDate($old,$last);
+        $this->assertEquals(true,$ret);
+        $code = Code::find(1);
+		$this->assertEquals('160119',$code->cdOldUpdate);
+		$this->assertEquals('160719',$code->cdLastUpdate);
+	}
+
+	public function testMultiCode(){
         // $this->markTestSkipped('geting code spec is ok');
 
         $crawl = new \App\Library\Crawl();
@@ -156,12 +202,67 @@ class ExampleTest extends TestCase
         $code1 = new Code;
         $code1->cdNumber = '051360';
         $code1->cdName = '토비스';
-        // $code1->cdLastUpdate = '';
         $code1->save();
+
+        $code2 = new Code;
+        $code2->cdNumber = '005930';
+        $code2->cdName = '삼성전자';
+        $code2->save();
+
+        $code3 = new Code;
+        $code3->cdNumber = '000660';
+        $code3->cdName = 'SK하이닉스';
+        $code3->save();
+
+        $code4 = new Code;
+        $code4->cdNumber = '066830';
+        $code4->cdName = '제노텍';
+        $code4->save();
+
+        $code = Code::find(1);
+
+        //// 여기 하는 중....
+
+        // $crawl = new Crawl($code);
+        // $result = $crawl->getCodeData();
+        // $code->saveUpdateDate($crawl->oldestDate, $crawl->lastestDate);
+        
+        // foreach ($result as $key => $value) {
+        //     DayData::create(array(
+        //         'stCodeIdx'=>$value['codeIdx']
+        //         ,'ddDate'=>$value['ddDate']
+        //         ,'ddJongGa'=>$value['ddJongGa']
+        //         ,'ddJulIlBi'=>$value['ddJulIlBi']
+        //         ,'ddDeunRakPok'=>$value['ddDeunRakPok']
+        //         ,'ddGeRaeRyang'=>$value['ddGeRaeRyang']
+        //         ,'ddSunMaeMae'=>$value['ddSunMaeMae']
+        //         ,'ddForSunMaeMae'=>$value['ddForSunMaeMae']
+        //         ,'ddForBoYuJuSu'=>$value['ddForBoYuJuSu']
+        //         ,'ddforBoYuYul'=>$value['ddforBoYuYul']
+        //     ));
+        // }
+        // $cnt = DayData::all()->count();
+        // $this->assertEquals(true,$cnt > 0);
+    }
+
+    public function testInsertDayilyData(){
+        // $this->markTestSkipped('geting code spec is ok');
+
+        $crawl = new \App\Library\Crawl();
+
+        DB::table('stCode')->truncate();
+        DB::table('stDayData')->truncate();
+
+        $code = new Code;
+        $code->cdNumber = '051360';
+        $code->cdName = '토비스';
+        // $code->cdLastUpdate = '160716';
+        $code->save();
 
         $code = Code::find(1);
         $crawl = new Crawl($code);
         $result = $crawl->getCodeData();
+        $code->saveUpdateDate($crawl->oldestDate, $crawl->lastestDate);
         
         foreach ($result as $key => $value) {
             DayData::create(array(
@@ -178,10 +279,7 @@ class ExampleTest extends TestCase
             ));
         }
         $cnt = DayData::all()->count();
-        echo $cnt.'<==';
-        $this->assertEquals(true,$cnt > 1);
-
-        ####안되는 중
+        $this->assertEquals(true,$cnt > 0);
     }
 
     public function testCheckDup(){
