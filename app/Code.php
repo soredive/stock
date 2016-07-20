@@ -21,6 +21,11 @@ class Code extends Model //implements CodeInterface
 	    // 'is_admin' => 'boolean',
 	];
 
+	public function saveUpdateName($name){
+		$this->cdName = $name;
+		$this->save();
+	}
+
 	public function saveUpdateDate($oldDate=null, $lastDate=null){
 		$changed = false;
 		if($oldDate){

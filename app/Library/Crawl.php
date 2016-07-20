@@ -7,18 +7,22 @@ use \App\Exceptions\Handler;
 use \App\Library\Data;
 
 interface CrawlInterface {
+	const baseUrl = 'http://finance.naver.com/item/frgn.nhn';
+	const maxTryCnt = 20;
+
 	public function getHtml($url);
 	public function getUrl();
-	
 	public function rowCheck($idx);
 }
 
 class Crawl implements CrawlInterface{
+	private $validRow = [3,4,5,6,7,11,12,13,14,15,19,20,21,22,23,27,28,29,30,31];
 
-	public $codeLists;
-	public $baseUrl;
-	public $curl;
-
+	private $client;
+	private $processData;
+	private $tempData;
+	private $targetDate = '';
+	
 	public $currentCode;
 	public $currentCodeIdx;
 	public $currentName;
@@ -28,19 +32,12 @@ class Crawl implements CrawlInterface{
 	public $lastestDate;
 	public $oldestDate;
 
-	public $processData;
-
-	private $validRow = [3,4,5,6,7,11,12,13,14,15,19,20,21,22,23,27,28,29,30,31];
-
-	public $targetDate = '';
 	public $tryCnt = 0;
 
-	public $data;
-	private $tempData;
 	public $chkDone = false;
 	public $going = true;
 	public $goCnt = 0;
-	public $maxTryCnt = 20;
+	
 	
 	public function __construct($code = null, $page = 1){
 		if(isset($code)){
@@ -54,12 +51,25 @@ class Crawl implements CrawlInterface{
 
 		$this->client = new Client();
 		$this->processData = new \App\Library\Data();
-		$this->data = [];
 		$this->targetDate = $this->getMonthDate();
-		$this->baseUrl = 'http://finance.naver.com/item/frgn.nhn';
+		
 		$this->chkDone = false;
+	}
 
-		$this->init();
+	public function reset(){
+		$this->currentCode = null;
+		$this->currentCodeIdx = null;
+		$this->currentName = null;
+		$this->currentLastUpdate = '';
+		$this->currentPage = null;
+
+		$this->lastestDate = null;
+		$this->oldestDate = null;
+		$this->tryCnt = 0;
+
+		$this->chkDone = false;
+		$this->going = true;
+		$this->goCnt = 0;
 	}
 
 	public function fromCode($code){
@@ -85,7 +95,7 @@ class Crawl implements CrawlInterface{
 		$result = [];
 		$this->chkDone = false;
 
-		while($this->chkDone == false && $this->goCnt < $this->maxTryCnt){
+		while($this->chkDone == false && $this->goCnt < Crawl::maxTryCnt){
 			$url = $this->getUrl();
 			$pageData = $this->getHtml();
 			$result = array_merge($result, $pageData);
@@ -118,26 +128,28 @@ class Crawl implements CrawlInterface{
 		if(!$this->currentCode){
 			throw new \Exception('no code');
 		}
-		return $this->baseUrl . '?code=' .$this->currentCode . '&page=' . $this->currentPage;
+		return Crawl::baseUrl . '?code=' .$this->currentCode . '&page=' . $this->currentPage;
 	}
 
-	public function init(){
-		// $this->codeLists = ['051360'];
+	public function checkValidRow($node){
+		return $node->count() > 0; // nodes must have 1 more spans
 	}
 
 	public function getHtml($url = null){
 
 		$url = $this->getUrl();
-		$crawler = $lists = $this->client->request('GET',$url);
+		$crawler = $this->client->request('GET',$url);
 		
 		$table = $crawler->filter('.section.inner_sub table')->eq(1);
-		// var_dump($table);
+
 		$str = '';
 		$tr = $table->filter('tr')->reduce(function(\Symfony\Component\DomCrawler\Crawler $node, $idx){
 			return $this->rowCheck($idx);
 		});
 		$this->tempData = [];
 		$this->chkDone = false;
+
+		$rowError = false;
 		$tr->each(function(\Symfony\Component\DomCrawler\Crawler $curTr, $idx){
 			if($this->chkDone){
 				return false;
@@ -148,6 +160,11 @@ class Crawl implements CrawlInterface{
 			// for db insert info
 			$data['code'] = $this->currentCode;
 			$data['codeIdx'] = $this->currentCodeIdx;
+
+			if($this->checkValidRow($spans) === false){
+				$this->chkDone = true;
+				return false;
+			}
 
             $data['ddDate'] = $this->processData->Row0($spans->eq(0)->text());
             $data['ddJongGa'] = $this->processData->Row1($spans->eq(1)->text());
@@ -173,27 +190,7 @@ class Crawl implements CrawlInterface{
             }
 		});
 		return $this->tempData;
-	}
-
-	public function add(){
-		
-	}
-
-	public function getDate(){
-
-	}
-
-	public function delete(){
-
-	}
-
-	public function insert(){
-
-	}
-
-	public function get(){
-		return 'abc';
-	}
+	}	
 }
 
 

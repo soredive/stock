@@ -4,7 +4,6 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-use \App\Library\Stock;
 use \App\Library\Crawl;
 use \App\Library\Data;
 use \App\Code;
@@ -25,6 +24,12 @@ class ExampleTest extends TestCase
 	public $code;
 	public $stock;
 	public $crawl;
+
+	public function codeFactory(){
+		$this->markTestSkipped('factory spec is ok');
+
+		/////////////////팩토리 ui 작업하면 끝 라우팅이랑 파일 다운로드도
+	}
 
 	public function codeTest(){
 		$this->markTestSkipped('code spec is ok');
@@ -191,8 +196,23 @@ class ExampleTest extends TestCase
 		$this->assertEquals('160719',$code->cdLastUpdate);
 	}
 
+	public function testUpdateCodeName(){
+		$this->markTestSkipped('geting code spec is ok');
+
+		DB::table('stCode')->truncate();
+		$code1 = new Code;
+        $code1->cdNumber = '051360';
+        $code1->save();
+
+        $code1->saveUpdateName('이런헐헐');
+
+        $code = Code::find(1);
+        $this->assertEquals('이런헐헐',$code->cdName);
+	}
+
+	# 멀티 코드 업데이트(전체)
 	public function testMultiCode(){
-        // $this->markTestSkipped('geting code spec is ok');
+        $this->markTestSkipped('geting code spec is ok');
 
         $crawl = new \App\Library\Crawl();
 
@@ -219,34 +239,34 @@ class ExampleTest extends TestCase
         $code4->cdName = '제노텍';
         $code4->save();
 
-        $code = Code::find(1);
+        $crawl = new Crawl();
+        foreach(Code::all() as $code){
+        	$crawl->reset();
+        	$result = $crawl->getCodeData($code);
+        	$code->saveUpdateDate($crawl->oldestDate, $crawl->lastestDate);
 
-        //// 여기 하는 중....
-
-        // $crawl = new Crawl($code);
-        // $result = $crawl->getCodeData();
-        // $code->saveUpdateDate($crawl->oldestDate, $crawl->lastestDate);
-        
-        // foreach ($result as $key => $value) {
-        //     DayData::create(array(
-        //         'stCodeIdx'=>$value['codeIdx']
-        //         ,'ddDate'=>$value['ddDate']
-        //         ,'ddJongGa'=>$value['ddJongGa']
-        //         ,'ddJulIlBi'=>$value['ddJulIlBi']
-        //         ,'ddDeunRakPok'=>$value['ddDeunRakPok']
-        //         ,'ddGeRaeRyang'=>$value['ddGeRaeRyang']
-        //         ,'ddSunMaeMae'=>$value['ddSunMaeMae']
-        //         ,'ddForSunMaeMae'=>$value['ddForSunMaeMae']
-        //         ,'ddForBoYuJuSu'=>$value['ddForBoYuJuSu']
-        //         ,'ddforBoYuYul'=>$value['ddforBoYuYul']
-        //     ));
-        // }
-        // $cnt = DayData::all()->count();
-        // $this->assertEquals(true,$cnt > 0);
+	        foreach ($result as $key => $value) {
+	            DayData::create(array(
+	                'stCodeIdx'=>$value['codeIdx']
+	                ,'ddDate'=>$value['ddDate']
+	                ,'ddJongGa'=>$value['ddJongGa']
+	                ,'ddJulIlBi'=>$value['ddJulIlBi']
+	                ,'ddDeunRakPok'=>$value['ddDeunRakPok']
+	                ,'ddGeRaeRyang'=>$value['ddGeRaeRyang']
+	                ,'ddSunMaeMae'=>$value['ddSunMaeMae']
+	                ,'ddForSunMaeMae'=>$value['ddForSunMaeMae']
+	                ,'ddForBoYuJuSu'=>$value['ddForBoYuJuSu']
+	                ,'ddforBoYuYul'=>$value['ddforBoYuYul']
+	            ));
+	        }
+        }
+        $cnt = DayData::all()->count();
+        $this->assertEquals(true,$cnt > 0);
     }
 
+    # 싱글 코드 업데이트
     public function testInsertDayilyData(){
-        // $this->markTestSkipped('geting code spec is ok');
+        $this->markTestSkipped('geting code spec is ok');
 
         $crawl = new \App\Library\Crawl();
 
