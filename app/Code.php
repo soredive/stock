@@ -51,9 +51,10 @@ class Code extends Model //implements CodeInterface
     	return $this->hasMany('App\DayData', 'stCodeIdx', 'id');
     }
 
-	public static function add($code){
+	public static function add($code,$codeName=''){
 		self::firstOrCreate([
-            "cdNumber"=>$code
+            "cdNumber"=>$code,
+            "cdName"=>$codeName
         ]);
 	}
 }

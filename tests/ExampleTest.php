@@ -212,7 +212,7 @@ class ExampleTest extends TestCase
 
 	# 멀티 코드 업데이트(전체)
 	public function testMultiCode(){
-        $this->markTestSkipped('geting code spec is ok');
+        // $this->markTestSkipped('geting code spec is ok');
 
         $crawl = new \App\Library\Crawl();
 
