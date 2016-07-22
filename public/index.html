@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="stock" ng-controller="codeCtrl">
+<head>
+	<meta charset="UTF-8">
+	<title>STOCK</title>
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+	<script src="/js/angular.min.js"></script>
+	<style>
+	.table tr:hover{background-color:#c9d8c5 !important;}
+	a{cursor: pointer;}
+	body{min-height: 1000px;}
+	</style>
+</head>
+<body>
+	<div class="row">
+		<div class="col-lg-8 col-md-8 col-sm-10 col-xs-12 col-lg-offset-2 col-md-offset-2 col-sm-offset-1">
+			<div class="well">
+				<form ng-submit="codeAdd()">
+						CODE 추가 
+						<input id="newCode" ng-model="newCode" placeholder="새로운 코드를 입력하세요"></input>
+				</form>
+				<br>
+				<button class="btn btn-default" ng-click="crawl();">전체 크롤링</button>
+				<button class="btn btn-default" ng-click="showsetting=!showsetting">설정</button>
+				<div class="well" ng-show="showsetting">
+					설정<br>
+					작업중.
+					<!-- 구분자 <input type="text" name="separater" id="separater"> -->
+				</div>
+			</div>
+
+			<div class="well">
+				검색	
+				<input type="text" ng-model="searching" placeholder="검색어를 입력하세요">
+			</div>
+			
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>NO</th>
+						<th>이름</th>
+						<th>코드</th>
+						<th>최근기록</th>
+						<th>오랜된기록</th>
+						<th>업데이트</th>
+						<th>생성</th>
+						<th>다운로드</th>
+						<th>삭제</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="code in codes  | filter:searching track by code.id">
+						<td>{{$index + 1}}</td>
+						<td><a ng-click="seeDetail(code.id, code.cdName)">{{code.cdName}}</a></td>
+						<td>{{code.cdNumber}}</td>
+						<td>{{code.cdLastUpdate}}</td>
+						<td>{{code.cdOldUpdate}}</td>
+						<td>{{code.created_at}}</td>
+						<td>{{code.updated_at}}</td>
+						<td>다운로드</td>
+						<td><a ng-click="delete(code.id)">삭제</a></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th colspan="9" style="text-align:center;">>> {{currentName}} <<</th>
+					</tr>
+					<tr>
+						<th>날자</th>
+						<th>종가</th>
+						<th>전일비</th>
+						<th>등락폭</th>
+						<th>거래량</th>
+						<th>순매매</th>
+						<th>외순매매</th>
+						<th>외보유량</th>
+						<th>외보유율</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="day in days track by day.id">
+						<td>{{day.ddDate}}</td>
+						<td>{{day.ddJongGa}}</td>
+						<td>{{day.ddJulIlBi}}</td>
+						<td>{{day.ddDeunRakPok}}</td>
+						<td>{{day.ddGeRaeRyang}}</td>
+						<td>{{day.ddSunMaeMae}}</td>
+						<td>{{day.ddForSunMaeMae}}</td>
+						<td>{{day.ddForBoYuJuSu}}</td>
+						<td>{{day.ddforBoYuYul}}</td>
+					</tr>
+				</tbody>
+			</table>		
+		</div>
+	</div>
+	
+	<div ng-init="loading=false" style="display:{{loading}};position:fixed;width:100%;height:100%;font-size:50px;color:white;text-align:center;opacity:0.6;transition:all 0.5s ease-out;">로딩중.....</div>
+	<script>
+		var app = angular.module("stock",['ng']);
+		app.controller('codeCtrl',function($scope, $http){
+			$scope.codes = [];
+			$scope.days = [];
+			$scope.newCode = '';
+			$scope.loading = false;
+			$http.get('/code').then(function(res){
+				$scope.codes = res.data;
+				$scope.codes.length && $scope.seeDetail($scope.codes[0].id, $scope.codes[0].cdName);
+			})
+			$scope.seeDetail = function(id){
+				console.log(id)
+			}
+			$scope.codeAdd = function(){
+				$http.post('/code/create',{"codeNumStr":$scope.newCode})
+				.then(function(res){
+					if(res.status==200)
+						$scope.codes = res.data;
+				});
+				return false;
+			}
+			$scope.delete = function(codeid){
+				$http.post('/code/destroy',{"codeId":codeid})
+				.then(function(res){
+					if(res.status==200)
+						$scope.codes = res.data;
+				});
+				return false;
+			}
+			$scope.seeDetail = function(codeid, cdName){
+				$scope.currentName = cdName;
+				$http.post('/code/data',{"codeId":codeid})
+				.then(function(res){
+					if(res.status==200)
+						$scope.days = res.data;
+				});
+				return false;
+			}
+			$scope.crawl = function(){
+				$scope.loading = true;
+				$http.post('/code/crawl')
+				.then(function(res){
+					if(res.status==200)
+						$scope.loading = false;
+				});
+				return false;
+			}
+		})
+	</script>
+</body>
+</html>

@@ -15,6 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::resource('code', 'CodesController');
+// Route::resource('codes', 'CodesController');
 
 Route::controller('code', 'CodeController');

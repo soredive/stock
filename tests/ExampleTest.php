@@ -25,12 +25,6 @@ class ExampleTest extends TestCase
 	public $stock;
 	public $crawl;
 
-	public function codeFactory(){
-		$this->markTestSkipped('factory spec is ok');
-
-		/////////////////팩토리 ui 작업하면 끝 라우팅이랑 파일 다운로드도
-	}
-
 	public function codeTest(){
 		$this->markTestSkipped('code spec is ok');
 

@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use Illuminate\Support\Facades\Input;
+
+
+
 class CodeController extends Controller
 {
     /**
@@ -28,12 +32,15 @@ class CodeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getCreate($codeNumStr,$codeName='')
+    public function postCreate()
     {
+        $codeNumStr = Input::get('codeNumStr');
+        $codeName = Input::get('codeName','');
     	if(!$codeNumStr){
-    		throw new Exception('code number is not exist');
+    		throw new \Exception('code number is not exist');
     	}
         \App\Code::add($codeNumStr, $codeName);
+        return \App\Code::all();
     }
 
     
@@ -46,7 +53,7 @@ class CodeController extends Controller
     public function getShow($codeNumStr)
     {
     	if(!$codeNumStr){
-    		throw new Exception('code number is not exist');
+    		throw new \Exception('code number is not exist');
     	}
         return \App\Code::where('cdNumber','=',$codeNumStr)->firstOrFail();
     }
@@ -57,15 +64,17 @@ class CodeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getDestroy($codeNumStr)
+    public function postDestroy()
     {
-        if(!$codeNumStr){
-    		throw new Exception('code number is not exist');
+        $codeId = Input::get('codeId');
+        if(!$codeId){
+    		throw new \Exception('code number is not exist');
     	}
-        \App\Code::where('cdNumber','=',$codeNumStr)->delete();
+        \App\Code::where('id','=',$codeId)->delete();
+        return \App\Code::all();
     }
 
-    public function getCrawl()
+    public function postCrawl()
     {
         $crawl = new Crawl();
         foreach(Code::all() as $code){
@@ -89,11 +98,15 @@ class CodeController extends Controller
 	        }
         }
         $cnt = DayData::all()->count();
-        // return 'updated: '.$cnt.' <==';
+        return 'updated: '.$cnt;
     }
 
-    public function getData($codeNumStr){
-    	return Code::where('cdNumber','=',$codeNumStr)->get()[0]->dayData;
+    public function postData(){
+        $codeId = Input::get('codeId');
+        if(!$codeId){
+            throw new \Exception('code number is not exist');
+        }
+    	return Code::where('id','=',$codeId)->get()[0]->dayData;
     }
 
     public function getOne()

@@ -6,12 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 interface CodeInterface {
 	public function add($code);
-	public function remove($code);
-	public function lists();
-	public function edit($idx,$code);
 }
 
-class Code extends Model //implements CodeInterface 
+class Code extends Model
 {
 	protected $table = 'stCode';
 	protected $fillable = array('cdNumber','cdName','cdLastUpdate','cdOldUpdate');
