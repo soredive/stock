@@ -18,3 +18,5 @@ Route::get('/', function () {
 // Route::resource('codes', 'CodesController');
 
 Route::controller('code', 'CodeController');
+
+Route::controller('kospi', 'KospiController');
