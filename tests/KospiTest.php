@@ -13,9 +13,34 @@ use \App\Kospi;
 
 class KospiTest extends TestCase
 {
+	public function testGogogo(){
+		$crawl = new Crawl();
+        foreach(Code::all() as $code){
+        	$crawl->reset();
+        	$result = $crawl->getCodeData($code);
+        	$code->saveUpdateDate($crawl->oldestDate, $crawl->lastestDate);
 
+	        foreach ($result as $key => $value) {
+	        	$exist = =\App\DayData::whereRaw('stCodeIdx = ? and ddDate = ?',array($value['codeIdx'],$value['ddDate']))->count();
+	        	if($exist < 1){
+	        		DayData::create(array(
+	        		    'stCodeIdx'=>$value['codeIdx']
+	        		    ,'ddDate'=>$value['ddDate']
+	        		    ,'ddJongGa'=>$value['ddJongGa']
+	        		    ,'ddJulIlBi'=>$value['ddJulIlBi']
+	        		    ,'ddDeunRakPok'=>$value['ddDeunRakPok']
+	        		    ,'ddGeRaeRyang'=>$value['ddGeRaeRyang']
+	        		    ,'ddSunMaeMae'=>$value['ddSunMaeMae']
+	        		    ,'ddForSunMaeMae'=>$value['ddForSunMaeMae']
+	        		    ,'ddForBoYuJuSu'=>$value['ddForBoYuJuSu']
+	        		    ,'ddforBoYuYul'=>$value['ddforBoYuYul']
+	        		));	
+	        	}
+	        }
+        }
+	}
 	public function testCode(){
-		// $this->markTestSkipped('get kospi spec is ok');
+		$this->markTestSkipped('get kospi spec is ok');
 		DB::table('stCode')->truncate();
 		DB::table('stDayData')->truncate();
 		DB::table('ksKospi')->truncate();

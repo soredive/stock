@@ -83,18 +83,21 @@ class CodeController extends Controller
         	$code->saveUpdateDate($crawl->oldestDate, $crawl->lastestDate);
 
 	        foreach ($result as $key => $value) {
-	            DayData::create(array(
-	                'stCodeIdx'=>$value['codeIdx']
-	                ,'ddDate'=>$value['ddDate']
-	                ,'ddJongGa'=>$value['ddJongGa']
-	                ,'ddJulIlBi'=>$value['ddJulIlBi']
-	                ,'ddDeunRakPok'=>$value['ddDeunRakPok']
-	                ,'ddGeRaeRyang'=>$value['ddGeRaeRyang']
-	                ,'ddSunMaeMae'=>$value['ddSunMaeMae']
-	                ,'ddForSunMaeMae'=>$value['ddForSunMaeMae']
-	                ,'ddForBoYuJuSu'=>$value['ddForBoYuJuSu']
-	                ,'ddforBoYuYul'=>$value['ddforBoYuYul']
-	            ));
+                $exist = =\App\DayData::whereRaw('stCodeIdx = ? and ddDate = ?',array($value['codeIdx'],$value['ddDate']))->count();
+                if($exist < 1){
+                    DayData::create(array(
+                        'stCodeIdx'=>$value['codeIdx']
+                        ,'ddDate'=>$value['ddDate']
+                        ,'ddJongGa'=>$value['ddJongGa']
+                        ,'ddJulIlBi'=>$value['ddJulIlBi']
+                        ,'ddDeunRakPok'=>$value['ddDeunRakPok']
+                        ,'ddGeRaeRyang'=>$value['ddGeRaeRyang']
+                        ,'ddSunMaeMae'=>$value['ddSunMaeMae']
+                        ,'ddForSunMaeMae'=>$value['ddForSunMaeMae']
+                        ,'ddForBoYuJuSu'=>$value['ddForBoYuJuSu']
+                        ,'ddforBoYuYul'=>$value['ddforBoYuYul']
+                    )); 
+                }
 	        }
         }
         return \App\Code::all();

@@ -80,7 +80,7 @@ class Code extends Model
             "cdNumber"=>$code,
             "cdName"=>$codeName,
             "cdRank"=>$rank
-        ]);
+        ])->id;
         return $codeIdx;
 	}
 }
