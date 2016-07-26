@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kospi extends Model
 {
-    protected $table = 'stDayData';
+    protected $table = 'ksKospi';
 	protected $fillable = array(
 		'stCodeIdx'
 		,'ksDate'

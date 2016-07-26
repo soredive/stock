@@ -11,7 +11,7 @@ interface CodeInterface {
 class Code extends Model
 {
 	protected $table = 'stCode';
-	protected $fillable = array('cdNumber','cdName','cdLastUpdate','cdOldUpdate');
+	protected $fillable = array('cdNumber','cdName','cdRank','cdLastUpdate','cdOldUpdate');
 	// 할당 차단 필드
 	protected $guarded = array('id');
 	protected $casts = [
@@ -61,13 +61,26 @@ class Code extends Model
     	return $this->hasMany('App\Kospi', 'stCodeIdx', 'id');
     }
 
-	public static function add($code,$codeName=''){
+    public static function addIfNotExist($code, $codeName='',$rank=''){
+    	$codeIdx = null;
+    	$list = \App\Code::where('cdNumber','=',$code)->get();
+    	if($list->count() > 0 && isset($list['0']->id)){
+    		$codeIdx = $list['0']->id;
+    	}else{
+    		$codeIdx = self::add($code, $codeName);
+    	}
+    	return $codeIdx;
+    }
+
+	public static function add($code,$codeName='',$rank=''){
 		if($codeName == ''){
 			$codeName = Code::getCompanyName($code);
 		}
-		self::firstOrCreate([
+		$codeIdx = self::firstOrCreate([
             "cdNumber"=>$code,
-            "cdName"=>$codeName
+            "cdName"=>$codeName,
+            "cdRank"=>$rank
         ]);
+        return $codeIdx;
 	}
 }
