@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use \Goutte\Client;
 use Illuminate\Database\Eloquent\Model;
 
 interface CodeInterface {
@@ -17,6 +17,15 @@ class Code extends Model
 	protected $casts = [
 	    // 'is_admin' => 'boolean',
 	];
+
+	public static function getCompanyName($code){
+		$client = new \Goutte\Client();
+		$html = $client->request('GET','http://finance.naver.com/item/main.nhn?code='.$code);
+		$title = $html->filter('title');
+		$txt = $title->text();
+		list($name) = explode(':', $txt);
+		return trim($name);
+	}
 
 	public function saveUpdateName($name){
 		$this->cdName = $name;
@@ -49,6 +58,9 @@ class Code extends Model
     }
 
 	public static function add($code,$codeName=''){
+		if($codeName == ''){
+			$codeName = Code::getCompanyName($code);
+		}
 		self::firstOrCreate([
             "cdNumber"=>$code,
             "cdName"=>$codeName

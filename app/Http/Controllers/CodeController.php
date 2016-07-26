@@ -97,8 +97,7 @@ class CodeController extends Controller
 	            ));
 	        }
         }
-        $cnt = DayData::all()->count();
-        return 'updated: '.$cnt;
+        return \App\Code::all();
     }
 
     public function postData(){

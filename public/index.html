@@ -43,8 +43,8 @@
 						<th>코드</th>
 						<th>최근기록</th>
 						<th>오랜된기록</th>
-						<th>업데이트</th>
-						<th>생성</th>
+						<!-- <th>업데이트</th>
+						<th>생성</th> -->
 						<th>다운로드</th>
 						<th>삭제</th>
 					</tr>
@@ -56,8 +56,8 @@
 						<td>{{code.cdNumber}}</td>
 						<td>{{code.cdLastUpdate}}</td>
 						<td>{{code.cdOldUpdate}}</td>
-						<td>{{code.created_at}}</td>
-						<td>{{code.updated_at}}</td>
+						<!-- <td>{{code.created_at}}</td>
+						<td>{{code.updated_at}}</td> -->
 						<td>다운로드</td>
 						<td><a ng-click="delete(code.id)">삭제</a></td>
 					</tr>
@@ -98,7 +98,7 @@
 		</div>
 	</div>
 	
-	<div ng-init="loading=false" style="display:{{loading}};position:fixed;width:100%;height:100%;font-size:50px;color:white;text-align:center;opacity:0.6;transition:all 0.5s ease-out;">로딩중.....</div>
+	<div ng-init="loading=false" style="display:{{loading?'block':'none'}};top:0;left:0;background:#555;position:fixed;width:100%;height:100%;font-size:50px;color:white;text-align:center;opacity:0.6;transition:all 0.5s ease-out;">로딩중.....</div>
 	<script>
 		var app = angular.module("stock",['ng']);
 		app.controller('codeCtrl',function($scope, $http){
@@ -133,8 +133,7 @@
 				$scope.currentName = cdName;
 				$http.post('/code/data',{"codeId":codeid})
 				.then(function(res){
-					if(res.status==200)
-						$scope.days = res.data;
+					$scope.days = res.data;
 				});
 				return false;
 			}
@@ -142,8 +141,8 @@
 				$scope.loading = true;
 				$http.post('/code/crawl')
 				.then(function(res){
-					if(res.status==200)
-						$scope.loading = false;
+					$scope.loading = false;
+					$scope.codes = res.data;
 				});
 				return false;
 			}
