@@ -57,6 +57,10 @@ class Code extends Model
     	return $this->hasMany('App\DayData', 'stCodeIdx', 'id');
     }
 
+    public function kospi(){
+    	return $this->hasMany('App\Kospi', 'stCodeIdx', 'id');
+    }
+
 	public static function add($code,$codeName=''){
 		if($codeName == ''){
 			$codeName = Code::getCompanyName($code);

@@ -7,7 +7,7 @@ use \App\Exceptions\Handler;
 use \App\Library\Data;
 
 interface CrawlInterface {
-	const baseUrl = 'http://finance.naver.com/item/frgn.nhn';
+	
 	const maxTryCnt = 20;
 
 	public function getHtml($url);
@@ -16,12 +16,13 @@ interface CrawlInterface {
 }
 
 class Crawl implements CrawlInterface{
-	private $validRow = [3,4,5,6,7,11,12,13,14,15,19,20,21,22,23,27,28,29,30,31];
+	protected $baseUrl = 'http://finance.naver.com/item/frgn.nhn';
+	protected $validRow = [3,4,5,6,7,11,12,13,14,15,19,20,21,22,23,27,28,29,30,31];
 
-	private $client;
-	private $processData;
-	private $tempData;
-	private $targetDate = '';
+	protected $client;
+	protected $processData;
+	protected $tempData;
+	protected $targetDate = '';
 	
 	public $currentCode;
 	public $currentCodeIdx;
@@ -128,7 +129,7 @@ class Crawl implements CrawlInterface{
 		if(!$this->currentCode){
 			throw new \Exception('no code');
 		}
-		return Crawl::baseUrl . '?code=' .$this->currentCode . '&page=' . $this->currentPage;
+		return $this->baseUrl . '?code=' .$this->currentCode . '&page=' . $this->currentPage;
 	}
 
 	public function checkValidRow($node){
