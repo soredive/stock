@@ -83,7 +83,7 @@ class CodeController extends Controller
         	$code->saveUpdateDate($crawl->oldestDate, $crawl->lastestDate);
 
 	        foreach ($result as $key => $value) {
-                $exist = =\App\DayData::whereRaw('stCodeIdx = ? and ddDate = ?',array($value['codeIdx'],$value['ddDate']))->count();
+                $exist = \App\DayData::whereRaw('stCodeIdx = ? and ddDate = ?',array($value['codeIdx'],$value['ddDate']))->count();
                 if($exist < 1){
                     DayData::create(array(
                         'stCodeIdx'=>$value['codeIdx']

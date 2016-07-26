@@ -14,6 +14,7 @@ use \App\Kospi;
 class KospiTest extends TestCase
 {
 	public function testGogogo(){
+		DB::table('stDayData')->truncate();
 		$crawl = new Crawl();
         foreach(Code::all() as $code){
         	$crawl->reset();
@@ -21,7 +22,7 @@ class KospiTest extends TestCase
         	$code->saveUpdateDate($crawl->oldestDate, $crawl->lastestDate);
 
 	        foreach ($result as $key => $value) {
-	        	$exist = =\App\DayData::whereRaw('stCodeIdx = ? and ddDate = ?',array($value['codeIdx'],$value['ddDate']))->count();
+	        	$exist = \App\DayData::whereRaw('stCodeIdx = ? and ddDate = ?',array($value['codeIdx'],$value['ddDate']))->count();
 	        	if($exist < 1){
 	        		DayData::create(array(
 	        		    'stCodeIdx'=>$value['codeIdx']
