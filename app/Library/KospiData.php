@@ -7,14 +7,14 @@ class KospiData extends Data {
 		
 	}
 	public function Row1($str){
-		
-		return $str;
+		$val = trim($str);
+		return $val;
 	}
 	public function Row2($str, $class = ''){
 		$val = $this->toInt($str);
 		return $val;
 	}
-	public function Row3($str){
+	public function Row3($str, $class = ''){
 		$val = $this->toInt($str);
 		$val *= $this->getPlusMinus($class);
 		return $val;

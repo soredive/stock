@@ -6,10 +6,16 @@ use \App\Exceptions\Handler;
 use \App\Library\Data;
 
 class KospiCrawl extends \App\Library\Crawl{
+	protected $maxTryCnt = 50; // 코스피는 25페이지까지 있음 현재는
+
 	protected $baseUrl = 'http://finance.naver.com/sise/sise_market_sum.nhn';
 	protected $currentDate = null;
 	protected $validRow = [
-		2,3,4,5,6,		10,11,12,13,14,		18,19,20,21,22,		26,27,28,29,30,		34,35,36,37,38,		39,40,41,42,43,		47,48,49,50,51,		52,53,54,55,56,		60,61,62,63,64,		68,69,70,71,72
+		1,2,3,4,5,			9,10,11,12,13,		
+		17,18,19,20,21,		25,26,27,28,29,		
+		33,34,35,36,37,		41,42,43,44,45,		
+		49,50,51,52,53,		57,58,59,60,61,	
+		65,66,67,68,69,		73,74,75,76,77
 	];
 
 	public function __construct(){
@@ -41,6 +47,34 @@ class KospiCrawl extends \App\Library\Crawl{
 		return $this->baseUrl . '?page=' . $this->currentPage;
 	}
 
+	public function getCodeFromLink($link = ''){
+		list($dummy, $code) = explode('main.nhn?code=', $link);
+		return trim($code);
+	}
+
+	public function getTodayData($page = null){
+		if($page) 
+			$this->currentPage = $page;
+		else 
+			$this->currentPage = 1;
+		$this->goCnt = 0;
+		$result = [];
+		$this->chkDone = false;
+
+		while($this->chkDone == false && $this->goCnt < $this->maxTryCnt){
+			$url = $this->getUrl();
+			$pageData = $this->getHtml();
+			$result = array_merge($result, $pageData);
+			$this->goCnt++;
+			$this->currentPage++;
+		}
+		return $result;
+	}
+
+	public function checkValidRow($node){
+		return $node->count() > 1; // nodes must have 2 more tds
+	}
+
 	public function getHtml($url = null){
 		if(!$url){
 			$url = $this->getUrl();	
@@ -48,14 +82,12 @@ class KospiCrawl extends \App\Library\Crawl{
 		$crawler = $this->client->request('GET',$url);
 		
 		$table = $crawler->filter('#contentarea table.type_2 tbody');
-
 		$str = '';
 		$tr = $table->filter('tr')->reduce(function(\Symfony\Component\DomCrawler\Crawler $node, $idx){
 			return $this->rowCheck($idx);
 		});
 		$this->tempData = [];
 		$this->chkDone = false;
-
 		$rowError = false;
 		$tr->each(function(\Symfony\Component\DomCrawler\Crawler $curTr, $idx){
 			if($this->chkDone){
@@ -63,18 +95,16 @@ class KospiCrawl extends \App\Library\Crawl{
 			}
 			$tds = $curTr->filter('td');
 
-			/* TODO ORM모델로 하려다가 퍼포먼스가 일반 배열이 편할 것 같아서 plain object 로 할거냐 모델로 할거냐 배열로 할거냐.... 나중에 변경해도 괜찮을 듯 */
-			// for db insert info
-			$data['code'] = $this->currentCode;
-			$data['codeIdx'] = $this->currentCodeIdx;
-
 			if($this->checkValidRow($tds) === false){
 				$this->chkDone = true;
 				return false;
 			}
-			// ...ing
-			// $code = 
-			// $data['stCodeIdx'] = $this->processData->Row0($tds->eq(0)->text());
+			# code index will update later...
+			# $data['codeIdx'] = $this->currentCodeIdx;
+
+			# saving temp data for update later
+			$data['ksTempCompanyName'] = $this->processData->Row1($tds->eq(1)->text());
+			$data['ksCode'] = $this->getCodeFromLink($this->processData->Row1($tds->eq(1)->filter('a')->attr('href')));
 
 			$data['ksDate'] = $this->currentDate;
 			$data['ksRank'] = $this->processData->Row0($tds->eq(0)->text());
@@ -89,10 +119,8 @@ class KospiCrawl extends \App\Library\Crawl{
 			$data['ksGaeRaeRyang'] = $this->processData->Row9($tds->eq(9)->text());
 			$data['ksPER'] = $this->processData->Row10($tds->eq(10)->text());
 			$data['ksROE'] = $this->processData->Row11($tds->eq(11)->text());
-            
-            ## 테스트
-            $this->chkDone = true;
-            ## 테스트
+
+			$this->tempData[] = $data;
 		});
 		return $this->tempData;
 	}	

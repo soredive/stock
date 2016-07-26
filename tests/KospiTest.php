@@ -16,7 +16,8 @@ class KospiTest extends TestCase
 		// $this->markTestSkipped('code spec is ok');
 
         $k = new App\Library\KospiCrawl;
-        var_dump($k->getHtml());
+        var_dump($list = $k->getTodayData());
+        echo 'count:'.count($list);
 
 		$this->assertEquals(1,1);
 	}

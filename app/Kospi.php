@@ -10,6 +10,8 @@ class Kospi extends Model
 	protected $fillable = array(
 		'stCodeIdx'
 		,'ksDate'
+		,'ksCode'
+		,'ksTempCompanyName'
 		,'ksRank'
 		,'ksHyunJaeGa'
 		,'ksJulIlBi'
