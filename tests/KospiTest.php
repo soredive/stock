@@ -14,6 +14,7 @@ use \App\Kospi;
 class KospiTest extends TestCase
 {
 	public function testGogogo(){
+        // $this->markTestSkipped('get kospi spec is ok');
 		DB::table('stDayData')->truncate();
 		$crawl = new Crawl();
         foreach(Code::all() as $code){

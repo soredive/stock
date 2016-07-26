@@ -67,7 +67,7 @@ class Code extends Model
     	if($list->count() > 0 && isset($list['0']->id)){
     		$codeIdx = $list['0']->id;
     	}else{
-    		$codeIdx = self::add($code, $codeName);
+    		$codeIdx = self::add($code, $codeName, $rank);
     	}
     	return $codeIdx;
     }
