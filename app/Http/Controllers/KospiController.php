@@ -19,8 +19,8 @@ class KospiController extends Controller
         $list = $k->getTodayData();
 
         foreach($list as $item){
-        	$codeIdx = Code::addIfNotExist($item['ksCode'],$item['ksTempCompanyName'],$item['ksRank']);
-			Kospi::create(array(
+        	$codeIdx = \App\Code::addIfNotExist($item['ksCode'],$item['ksTempCompanyName'],$item['ksRank']);
+			\App\Kospi::create(array(
 	        	'ksDate' => $item['ksDate']
 	        	,'stCodeIdx' => $codeIdx
 				,'ksCode' => $item['ksCode']

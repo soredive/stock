@@ -20,3 +20,5 @@ Route::get('/', function () {
 Route::controller('code', 'CodeController');
 
 Route::controller('kospi', 'KospiController');
+
+Route::controller('buyer', 'BuyerController');

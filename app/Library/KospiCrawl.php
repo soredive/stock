@@ -99,6 +99,9 @@ class KospiCrawl extends \App\Library\Crawl{
 				$this->chkDone = true;
 				return false;
 			}
+
+
+
 			# code index will update later...
 			# $data['codeIdx'] = $this->currentCodeIdx;
 
@@ -119,6 +122,14 @@ class KospiCrawl extends \App\Library\Crawl{
 			$data['ksGaeRaeRyang'] = $this->processData->Row9($tds->eq(9)->text());
 			$data['ksPER'] = $this->processData->Row10($tds->eq(10)->text());
 			$data['ksROE'] = $this->processData->Row11($tds->eq(11)->text());
+
+			if($idx == 0 || $idx == 1){
+				$testingDuplicate = \App\Kospi::whereRaw('ksCode = ? and ksDate = ?',array($data['ksCode'], $data['ksDate']))->count();
+				if($testingDuplicate > 0){
+					$this->chkDone = true;
+					return false;
+				}
+			}
 
 			$this->tempData[] = $data;
 		});
