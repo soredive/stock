@@ -14,7 +14,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class FileTest extends TestCase
 {
 	public function testSise(){
-		// $this->markTestSkipped('get kospi spec is ok');
+		$this->markTestSkipped('not need this');
 		$response = $this->action('POST', 'SiseController@postCrawl');
         $view = $response->original;
         var_dump($view);
@@ -34,6 +34,7 @@ class FileTest extends TestCase
 		$d = new Downloader;
 		$d->prepareCode();
 		$d->prepareKospi();
+		$d->prepareSise();
 		$d->createZip();
 		
 		$this->assertEquals(true,true);

@@ -10,7 +10,7 @@ class Downloader
     public $folderPath = '';
     public $pathCode = '';
     public $pathKospi = '';
-    public $pathBuyer = '';
+    public $pathSise = '';
     public $targetDate = '';
     public $pathZipfile = '';
     public $sep = '|';
@@ -29,11 +29,22 @@ class Downloader
 
     public function setRandName(){
         if($this->randName == ''){
-            # $this->randName = date('ymdGis').'_'.rand(1,100);
+            $this->randName = date('ymdGis').'_'.rand(1,100);
             # testing
-            $this->randName = 'hehehe';
+            // $this->randName = 'hehehe';
         }
         return $this->randName;
+    }
+
+    public function formatSise($item){
+        return 
+        $item->ssDate . $this->sep .
+        $item->ssJongGa . $this->sep .
+        $item->ssJulIlBi . $this->sep .
+        $item->ssSiGa . $this->sep .
+        $item->ssGoGa . $this->sep .
+        $item->ssJeoGa . $this->sep .
+        $item->ssGeRaeRyang;
     }
 
     public function formatDayData($item){
@@ -67,6 +78,15 @@ class Downloader
         $item->ksROE;
     }
 
+    public function doDownload(){
+        $this->prepareCode();
+        $this->prepareKospi();
+        $this->prepareSise();
+        $this->createZip();
+
+        ////////////다운받기
+    }
+
     public function createZip(){
         $zip = new \Chumper\Zipper\Zipper;
         $zip->make($this->pathZipfile)->add($this->folderPath);
@@ -82,7 +102,6 @@ class Downloader
                 $iter = $dayLists->getIterator();
                 while($iter->valid()){
                     $day = $iter->current();
-                    // 여기
                     $contentsArr[] = $this->formatDayData($day);
                     $iter->next();
                 }
@@ -92,7 +111,27 @@ class Downloader
             # for testing
             # break;
         }
+    }
 
+    public function prepareSise(){
+        $list = \App\Code::all();
+        foreach($list as $key => $code){
+            $contentsArr = [];
+            $dayDatas = $code->sise()->where('ssDate','>',$this->targetDate);
+            if($dayDatas->count() > 0){
+                $dayLists = $dayDatas->getResults();
+                $iter = $dayLists->getIterator();
+                while($iter->valid()){
+                    $day = $iter->current();
+                    $contentsArr[] = $this->formatSise($day);
+                    $iter->next();
+                }
+            }
+            $contentsStr = implode($this->sep2, $contentsArr);
+            \File::put($this->pathSise.'/'.$code->cdNumber.'.txt', $contentsStr);
+            # for testing
+            # break;
+        }
     }
 
     public function prepareKospi(){
@@ -133,8 +172,8 @@ class Downloader
         $this->pathKospi = $this->folderPath.'/Kospi';
         $this->makeFolder($this->pathKospi);
 
-        $this->pathBuyer = $this->folderPath.'/Buyer';
-        $this->makeFolder($this->pathBuyer);
+        $this->pathSise = $this->folderPath.'/Sise';
+        $this->makeFolder($this->pathSise);
 
         $this->pathZipfile = base_path().'/public/zips/'.$this->setRandName().'.zip';
     }
