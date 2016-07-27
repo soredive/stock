@@ -1,13 +1,6 @@
 <?php
 namespace App;
 
-use \App\Library\Crawl;
-use \App\Library\Data;
-use \App\Code;
-use \App\DayData;
-use \App\Kospi;
-use \App\Downloader;
-
 class Downloader
 {
     public $randName = '';

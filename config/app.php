@@ -213,15 +213,18 @@ return [
         'Code' => App\Code::class,
         'DayData' => App\DayData::class,
         'Kospi' => App\Kospi::class,
+        'Buyer' => App\Buyer::class,
+        
         'Downloader' => App\Downloader::class,
 
         'Crawl' => App\Library\Crawl::class,
         'Data' => App\Library\Data::class,
         'KospiCrawl' => App\Library\KospiCrawl::class,
         'KospiData' => App\Library\KospiData::class,
-
+        'BuyerCrawl' => App\Library\BuyerCrawl::class,
+        'BuyerData' => App\Library\BuyerData::class,
+        
         'Zipper' => Chumper\Zipper\Zipper::class
-
     ],
 
 ];

@@ -3,6 +3,7 @@ app.config(['$routeProvider',function($routeProvider){
     $routeProvider
         .when('/codes',{templateUrl:'/views/code.html',controller:'codeCtrl'})
         .when('/kospis',{templateUrl:'/views/kospis.html',controller:'kospiCtrl'})
+        .when('/buyer',{templateUrl:'/views/buyer.html',controller:'buyerCtrl'})
     	.otherwise({redirectTo:'/codes'});
     // $locationProvider.html5Mode(false); // false
 }]);
@@ -79,6 +80,31 @@ app.controller('kospiCtrl',function($scope, $http){
     $scope.crawl = function(){
         $scope.loading = true;
         $http.post('/kospi/crawl')
+        .then(function(res){
+            $scope.loading = false;
+            $scope.datas = res.data;
+            $scope.currentDate = res.data[0].ksDate;
+            $scope.currentLength = '총'+res.data.length+'건';
+        });
+        return false;
+    }
+});
+app.controller('buyerCtrl',function($scope, $http){
+    $scope.datas = [];
+    $scope.loading = false;
+    $scope.pageSize = 20;
+    $scope.codeOrder = 'id';
+    $scope.codeOrderAsc = false;
+    $scope.currentDate = null;
+    $scope.currentLength = null;
+    $http.get('/buyer').then(function(res){
+        $scope.datas = res.data;
+        $scope.currentDate = res.data[0].ksDate;
+        $scope.currentLength = '총'+res.data.length+'건';
+    })
+    $scope.crawl = function(){
+        $scope.loading = true;
+        $http.post('/buyer/crawl')
         .then(function(res){
             $scope.loading = false;
             $scope.datas = res.data;

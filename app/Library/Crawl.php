@@ -4,7 +4,6 @@ namespace App\Library;
 // use \anlutro\cURL\cURL;
 use \Goutte\Client;
 use \App\Exceptions\Handler;
-use \App\Library\Data;
 
 interface CrawlInterface {
 	public function getHtml($url);

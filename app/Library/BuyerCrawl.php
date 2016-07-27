@@ -4,8 +4,8 @@ namespace App\Library;
 use \Goutte\Client;
 use \App\Exceptions\Handler;
 
-class KospiCrawl extends \App\Library\Crawl{
-	protected $maxTryCnt = 50; // 코스피는 25페이지까지 있음 현재는
+class BuyerCrawl extends Crawl{
+	protected $maxTryCnt = 150; // 150 페이지까지 있음 현재는
 
 	protected $baseUrl = 'http://finance.naver.com/sise/sise_market_sum.nhn';
 	protected $currentDate = null;
