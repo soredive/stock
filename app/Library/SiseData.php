@@ -12,7 +12,7 @@ class SiseData extends Data {
 		return $str;
 	}
 	public function Row1($str){
-		$val = trim($str);
+		$val = $this->toInt($str);
 		return $val;
 	}
 	public function Row2($str, $class = ''){

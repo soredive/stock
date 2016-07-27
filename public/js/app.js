@@ -125,7 +125,6 @@ app.controller('siseCtrl',function($scope, $http){
         return false;
     }
     $scope.crawl = function(){
-        alert('start!!!');
         $scope.loading = true;
         $http.post('/sise/crawl')
         .then(function(res){

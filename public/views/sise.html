@@ -6,7 +6,7 @@
 						<input id="newCode" ng-model="newCode" placeholder="새로운 코드를 입력하세요"></input>
 				</form>
 				<br>
-				<button class="btn btn-default" ng-click="crawl();">전체 크롤링</button>
+				<button class="btn btn-default" ng-click="crawl();">시세 크롤링</button>
 				<button class="btn btn-default" ng-click="showsetting=!showsetting">설정</button>
 				<div class="well" ng-show="showsetting">
 					설정<br>
@@ -85,27 +85,23 @@
 						<th>날자</th>
 						<th>종가</th>
 						<th>전일비</th>
-						<th>등락폭</th>
+						<th>시가</th>
+						<th>고가</th>
+						<th>저가</th>
 						<th>거래량</th>
-						<th>순매매</th>
-						<th>외순매매</th>
-						<th>외보유량</th>
-						<th>외보유율</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="day in days 
 						| orderBy:ddDate:true 
 						track by day.id">
-						<td>{{day.ddDate}}</td>
-						<td>{{day.ddJongGa}}</td>
-						<td>{{day.ddJulIlBi}}</td>
-						<td>{{day.ddDeunRakPok}}</td>
-						<td>{{day.ddGeRaeRyang}}</td>
-						<td>{{day.ddSunMaeMae}}</td>
-						<td>{{day.ddForSunMaeMae}}</td>
-						<td>{{day.ddForBoYuJuSu}}</td>
-						<td>{{day.ddforBoYuYul}}</td>
+						<td>{{day.ssDate}}</td>
+						<td>{{day.ssJongGa}}</td>
+						<td>{{day.ssJulIlBi}}</td>
+						<td>{{day.ssSiGa}}</td>
+						<td>{{day.ssGoGa}}</td>
+						<td>{{day.ssJeoGa}}</td>
+						<td>{{day.ssGeRaeRyang}}</td>
 					</tr>
 				</tbody>
 			</table>		
