@@ -60,7 +60,7 @@
 						| filter:searching2
                         | orderBy:codeOrder:codeOrderAsc 
                         | itemsPerPage: pageSize
-					 track by code.id">
+					 track by code.id" class="{{currentId==code.id?'current-row':''}}" >
 						<td>{{$index + 1}}</td>
 						<td><a ng-click="seeDetail(code.id, code.cdName)">{{code.cdName}}</a></td>
 						<td>{{code.cdNumber}}</td>

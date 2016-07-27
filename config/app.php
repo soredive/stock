@@ -156,6 +156,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+        *   stock app
+        */
+        Chumper\Zipper\ZipperServiceProvider::class
+
     ],
 
     /*
@@ -201,6 +206,21 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        /*
+        *   stock app
+        */
+        'Code' => App\Code::class,
+        'DayData' => App\DayData::class,
+        'Kospi' => App\Kospi::class,
+        'Downloader' => App\Downloader::class,
+
+        'Crawl' => App\Library\Crawl::class,
+        'Data' => App\Library\Data::class,
+        'KospiCrawl' => App\Library\KospiCrawl::class,
+        'KospiData' => App\Library\KospiData::class,
+
+        'Zipper' => Chumper\Zipper\Zipper::class
 
     ],
 

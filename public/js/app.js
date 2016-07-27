@@ -16,6 +16,7 @@ app.controller('codeCtrl',function($scope, $http){
 	$scope.codes = [];
 	$scope.days = [];
 	$scope.newCode = '';
+    $scope.currentId = '';
 	$scope.loading = false;
 	$scope.pageSize = 20;
 	$scope.codeOrder = 'id';
@@ -48,7 +49,8 @@ app.controller('codeCtrl',function($scope, $http){
 		$http.post('/code/data',{"codeId":codeid})
 		.then(function(res){
 			$scope.days = res.data;
-		});
+        });
+        $scope.currentId = codeid;
 		return false;
 	}
 	$scope.crawl = function(){

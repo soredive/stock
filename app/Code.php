@@ -27,6 +27,21 @@ class Code extends Model
 		return trim($name);
 	}
 
+	// dates 실데이터와 비교하여 업데이트
+	public function resetDatesToRight(){
+		$cnt = \App\Code::count();
+		for($i=1;$i<=$cnt;$i++){
+		    $code = \App\Code::find($i);
+		    if($code->dayData()->count()){
+		        $old = $code->dayData()->orderBy('ddDate','asc')->limit(1)->first()->ddDate;
+		        $last = $code->dayData()->orderBy('ddDate','desc')->limit(1)->first()->ddDate;
+		        $code->cdLastUpdate = $last;
+		        $code->cdOldUpdate = $old;
+		        $code->save();
+		    }
+		}
+	}
+
 	public function saveUpdateName($name){
 		$this->cdName = $name;
 		$this->save();
