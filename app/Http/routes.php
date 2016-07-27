@@ -21,4 +21,4 @@ Route::controller('code', 'CodeController');
 
 Route::controller('kospi', 'KospiController');
 
-Route::controller('buyer', 'BuyerController');
+Route::controller('sise', 'SiseController');

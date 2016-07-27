@@ -213,7 +213,7 @@ return [
         'Code' => App\Code::class,
         'DayData' => App\DayData::class,
         'Kospi' => App\Kospi::class,
-        'Buyer' => App\Buyer::class,
+        'Sise' => App\Sise::class,
         
         'Downloader' => App\Downloader::class,
 
@@ -221,8 +221,8 @@ return [
         'Data' => App\Library\Data::class,
         'KospiCrawl' => App\Library\KospiCrawl::class,
         'KospiData' => App\Library\KospiData::class,
-        'BuyerCrawl' => App\Library\BuyerCrawl::class,
-        'BuyerData' => App\Library\BuyerData::class,
+        'SiseCrawl' => App\Library\SiseCrawl::class,
+        'SiseData' => App\Library\SiseData::class,
         
         'Zipper' => Chumper\Zipper\Zipper::class
     ],

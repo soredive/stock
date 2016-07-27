@@ -1,0 +1,116 @@
+	<div class="row">
+		<div class="col-lg-8 col-md-8 col-sm-10 col-xs-12 col-lg-offset-2 col-md-offset-2 col-sm-offset-1">
+			<div class="well">
+				<form ng-submit="codeAdd()">
+						CODE 추가 
+						<input id="newCode" ng-model="newCode" placeholder="새로운 코드를 입력하세요"></input>
+				</form>
+				<br>
+				<button class="btn btn-default" ng-click="crawl();">전체 크롤링</button>
+				<button class="btn btn-default" ng-click="showsetting=!showsetting">설정</button>
+				<div class="well" ng-show="showsetting">
+					설정<br>
+					작업중.
+					<!-- 구분자 <input type="text" name="separater" id="separater"> -->
+				</div>
+			</div>
+
+			<div class="well">
+				검색	
+				<input type="text" ng-model="searching" placeholder="검색어를 입력하세요">
+				<input type="text" ng-model="searching2" placeholder="검색어를 입력하세요" style="margin-left: 20px;">
+			</div>
+			<div class="row">
+	               <div class="col-xs-6 col-sm-3 col-lg-2 col-md-2 pull-right">
+	                       <div class="input-group input-group-sm">
+	                               <input type="number" min="1" max="100" class="form-control" ng-model="pageSize" placeholder="페이지당" ng-change=""/>
+	                         <span class="input-group-addon">표시건</span>
+	                       </div>
+	                       <br/>
+	               </div>
+	        </div>
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>NO</th>
+						<th><a ng-click="codeOrder='cdName';codeOrderAsc=!codeOrderAsc;">이름 
+							<i ng-if="codeOrder == 'cdName';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+							</a></th>
+						<th><a ng-click="codeOrder='cdNumber';codeOrderAsc=!codeOrderAsc;">코드 
+							<i ng-if="codeOrder == 'cdNumber';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+							</a></th>
+						<th><a ng-click="codeOrder='cdRank';codeOrderAsc=!codeOrderAsc;">시총순위 
+							<i ng-if="codeOrder == 'cdRank';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+							</a></th>
+						<th><a ng-click="codeOrder='cdLastUpdate';codeOrderAsc=!codeOrderAsc;">최근기록 
+							<i ng-if="codeOrder == 'cdLastUpdate';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+							</a></th>
+						<th><a ng-click="codeOrder='cdOldUpdate';codeOrderAsc=!codeOrderAsc;">오랜된기록 
+							<i ng-if="codeOrder == 'cdOldUpdate';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+							</a></th>
+						<!-- <th><span ng-click="codeOrder='cdName'">업데이트</span></th>
+						<th><span ng-click="codeOrder='cdName'">생성</span></th> -->
+						<th>다운로드</th>
+						<th>삭제</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr dir-paginate="code in datas  
+						| filter:searching 
+						| filter:searching2
+                        | orderBy:codeOrder:codeOrderAsc 
+                        | itemsPerPage: pageSize
+					 track by code.id" class="{{currentId==code.id?'current-row':''}}" >
+						<td>{{$index + 1}}</td>
+						<td><a ng-click="seeDetail(code.id, code.cdName)">{{code.cdName}}</a></td>
+						<td>{{code.cdNumber}}</td>
+						<td>{{code.cdRank}}</td>
+						<td>{{code.cdLastUpdateSise}}</td>
+						<td>{{code.cdOldUpdateSise}}</td>
+						<!-- <td>{{code.created_at}}</td>
+						<td>{{code.updated_at}}</td> -->
+						<td>다운로드</td>
+						<td><a ng-click="delete(code.id)">삭제</a></td>
+					</tr>
+				</tbody>
+			</table>
+			<center><dir-pagination-controls></dir-pagination-controls></center>
+
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th colspan="9" style="text-align:center;">>> {{currentName}} <<</th>
+					</tr>
+					<tr>
+						<th>날자</th>
+						<th>종가</th>
+						<th>전일비</th>
+						<th>등락폭</th>
+						<th>거래량</th>
+						<th>순매매</th>
+						<th>외순매매</th>
+						<th>외보유량</th>
+						<th>외보유율</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="day in days 
+						| orderBy:ddDate:true 
+						track by day.id">
+						<td>{{day.ddDate}}</td>
+						<td>{{day.ddJongGa}}</td>
+						<td>{{day.ddJulIlBi}}</td>
+						<td>{{day.ddDeunRakPok}}</td>
+						<td>{{day.ddGeRaeRyang}}</td>
+						<td>{{day.ddSunMaeMae}}</td>
+						<td>{{day.ddForSunMaeMae}}</td>
+						<td>{{day.ddForBoYuJuSu}}</td>
+						<td>{{day.ddforBoYuYul}}</td>
+					</tr>
+				</tbody>
+			</table>		
+			
+		</div>
+	</div>
+	
+	<div ng-init="loading=false" style="display:{{loading?'block':'none'}};top:0;left:0;background:#555;position:fixed;width:100%;height:100%;font-size:50px;color:white;text-align:center;opacity:0.6;transition:all 0.5s ease-out;">로딩중.....</div>

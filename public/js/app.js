@@ -3,7 +3,7 @@ app.config(['$routeProvider',function($routeProvider){
     $routeProvider
         .when('/codes',{templateUrl:'/views/code.html',controller:'codeCtrl'})
         .when('/kospis',{templateUrl:'/views/kospis.html',controller:'kospiCtrl'})
-        .when('/buyer',{templateUrl:'/views/buyer.html',controller:'buyerCtrl'})
+        .when('/sise',{templateUrl:'/views/sise.html',controller:'siseCtrl'})
     	.otherwise({redirectTo:'/codes'});
     // $locationProvider.html5Mode(false); // false
 }]);
@@ -26,9 +26,6 @@ app.controller('codeCtrl',function($scope, $http){
 		$scope.codes = res.data;
 		$scope.codes.length && $scope.seeDetail($scope.codes[0].id, $scope.codes[0].cdName);
 	})
-	$scope.seeDetail = function(id){
-		console.log(id)
-	}
 	$scope.codeAdd = function(){
 		$http.post('/code/create',{"codeNumStr":$scope.newCode})
 		.then(function(res){
@@ -89,27 +86,51 @@ app.controller('kospiCtrl',function($scope, $http){
         return false;
     }
 });
-app.controller('buyerCtrl',function($scope, $http){
+app.controller('siseCtrl',function($scope, $http){
     $scope.datas = [];
+    $scope.days = [];
+    $scope.newCode = '';
+    $scope.currentId = '';
     $scope.loading = false;
     $scope.pageSize = 20;
     $scope.codeOrder = 'id';
     $scope.codeOrderAsc = false;
-    $scope.currentDate = null;
-    $scope.currentLength = null;
-    $http.get('/buyer').then(function(res){
+    $http.get('/code').then(function(res){
         $scope.datas = res.data;
-        $scope.currentDate = res.data[0].ksDate;
-        $scope.currentLength = '총'+res.data.length+'건';
+        $scope.datas.length && $scope.seeDetail($scope.datas[0].id, $scope.datas[0].cdName);
     })
+    $scope.codeAdd = function(){
+        $http.post('/code/create',{"codeNumStr":$scope.newCode})
+        .then(function(res){
+            if(res.status==200)
+                $scope.datas = res.data;
+        });
+        return false;
+    }
+    $scope.delete = function(codeid){
+        $http.post('/code/destroy',{"codeId":codeid})
+        .then(function(res){
+            if(res.status==200)
+                $scope.datas = res.data;
+        });
+        return false;
+    }
+    $scope.seeDetail = function(codeid, cdName){
+        $scope.currentName = cdName;
+        $http.post('/sise/data',{"codeId":codeid})
+        .then(function(res){
+            $scope.days = res.data;
+        });
+        $scope.currentId = codeid;
+        return false;
+    }
     $scope.crawl = function(){
+        alert('start!!!');
         $scope.loading = true;
-        $http.post('/buyer/crawl')
+        $http.post('/sise/crawl')
         .then(function(res){
             $scope.loading = false;
             $scope.datas = res.data;
-            $scope.currentDate = res.data[0].ksDate;
-            $scope.currentLength = '총'+res.data.length+'건';
         });
         return false;
     }

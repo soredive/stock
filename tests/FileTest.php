@@ -13,6 +13,14 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class FileTest extends TestCase
 {
+	public function testSise(){
+		// $this->markTestSkipped('get kospi spec is ok');
+		$response = $this->action('POST', 'SiseController@postCrawl');
+        $view = $response->original;
+        var_dump($view);
+        // $this->assertEquals('authentication.login', $view['name']);
+		$this->assertEquals(true,true);
+	}
 	public function testGogogo(){
         $this->markTestSkipped('get kospi spec is ok');
 		$d = new Downloader;
@@ -22,7 +30,7 @@ class FileTest extends TestCase
 	}
 
 	public function testKospi(){
-        // $this->markTestSkipped('get kospi spec is ok');
+        $this->markTestSkipped('get kospi spec is ok');
 		$d = new Downloader;
 		$d->prepareCode();
 		$d->prepareKospi();

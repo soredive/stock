@@ -110,18 +110,6 @@ class CodeController extends Controller
         }
     	return Code::where('id','=',$codeId)->get()[0]->dayData;
     }
-
-    public function getOne()
-    {
-        //
-        return 'one';
-    }
-
-    public function getAll()
-    {
-        //
-        return 'all';
-    }
 }
 
 

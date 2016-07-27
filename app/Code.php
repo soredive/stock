@@ -11,7 +11,8 @@ interface CodeInterface {
 class Code extends Model
 {
 	protected $table = 'stCode';
-	protected $fillable = array('cdNumber','cdName','cdRank','cdLastUpdate','cdOldUpdate');
+	protected $fillable = array('cdNumber','cdName','cdRank','cdLastUpdate','cdOldUpdate','cdLastUpdateSise','cdOldUpdateSise'
+		);
 	// 할당 차단 필드
 	protected $guarded = array('id');
 	protected $casts = [
@@ -68,8 +69,33 @@ class Code extends Model
 		return false;
 	}
 
+	public function saveUpdateDateSise($oldDate=null, $lastDate=null){
+		$changed = false;
+		if($oldDate){
+			if(!$this->cdOldUpdateSise || $oldDate < $this->cdOldUpdateSise){
+				$this->cdOldUpdateSise = $oldDate;
+				$changed = true;
+			}
+		}
+		if($lastDate){
+			if(!$this->cdLastUpdateSise || $lastDate > $this->cdLastUpdateSise){
+				$this->cdLastUpdateSise = $lastDate;
+				$changed = true;
+			}
+		}
+		if($changed){
+			$this->save();
+			return true;
+		}
+		return false;
+	}
+
     public function dayData(){
     	return $this->hasMany('App\DayData', 'stCodeIdx', 'id');
+    }
+
+    public function sise(){
+    	return $this->hasMany('App\Sise', 'stCodeIdx', 'id');
     }
 
     public function kospi(){
