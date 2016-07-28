@@ -30,6 +30,7 @@ app.controller('mainCtrl',function($scope, $http){
     }
 });
 app.controller('codeCtrl',function($scope, $http){
+    $scope.$parent.selectedTab = '#codes';
 	$scope.codes = [];
 	$scope.days = [];
 	$scope.newCode = '';
@@ -80,6 +81,7 @@ app.controller('codeCtrl',function($scope, $http){
 	}
 });
 app.controller('kospiCtrl',function($scope, $http){
+    $scope.$parent.selectedTab = '#kospis';
     $scope.datas = [];
     $scope.loading = false;
     $scope.pageSize = 20;
@@ -105,6 +107,7 @@ app.controller('kospiCtrl',function($scope, $http){
     }
 });
 app.controller('siseCtrl',function($scope, $http){
+    $scope.$parent.selectedTab = '#sise';
     $scope.datas = [];
     $scope.days = [];
     $scope.newCode = '';

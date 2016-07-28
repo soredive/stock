@@ -13,8 +13,35 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class FileTest extends TestCase
 {
-	public function testDelete(){
+	public function testTTT(){
 		// $this->markTestSkipped('not need this');
+		$crawl = new \App\Library\SiseCrawl();
+        $list = \App\Code::all();
+        foreach($list as $no => $code){
+        	$crawl->reset();
+        	$result = $crawl->getCodeData($code);
+        	$code->saveUpdateDateSise($crawl->oldestDate, $crawl->lastestDate);
+
+	        foreach ($result as $key => $value) {
+                $exist = \App\Sise::whereRaw('stCodeIdx = ? and ssDate = ?',array($value['codeIdx'],$value['ssDate']))->count();
+                if($exist < 1){
+                    \App\Sise::create([
+                        'stCodeIdx'=>$value['codeIdx']
+                        ,'ssDate'=>$value['ssDate']
+                        ,'ssJongGa'=>$value['ssJongGa']
+                        ,'ssJulIlBi'=>$value['ssJulIlBi']
+                        ,'ssSiGa'=>$value['ssSiGa']
+                        ,'ssGoGa'=>$value['ssGoGa']
+                        ,'ssJeoGa'=>$value['ssJeoGa']
+                        ,'ssGeRaeRyang'=>$value['ssGeRaeRyang']
+                    ]); 
+                }
+	        }
+            echo ($no+1).PHP_EOL;
+        }
+	}
+	public function testDelete(){
+		$this->markTestSkipped('not need this');
 
 		DB::table('stDownloadHistory')->truncate();
 
