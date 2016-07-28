@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Seoul',
 
     /*
     |--------------------------------------------------------------------------
@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ko',
 
     /*
     |--------------------------------------------------------------------------
@@ -216,7 +216,8 @@ return [
         'Sise' => App\Sise::class,
         
         'Downloader' => App\Downloader::class,
-
+        'DownloadHistory' => App\DownloadHistory::class,
+        
         'Crawl' => App\Library\Crawl::class,
         'Data' => App\Library\Data::class,
         'KospiCrawl' => App\Library\KospiCrawl::class,

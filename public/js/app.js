@@ -11,7 +11,23 @@ app.config(function(paginationTemplateProvider) {
     paginationTemplateProvider.setPath('/bower_components/angularUtils-pagination/dirPagination.tpl.html');
 });
 app.controller('mainCtrl',function($scope, $http){
-
+    $scope.downBtnTxt = '전체다운받기';
+    $scope.loading = false;
+    $scope.download = function(){
+        $scope.downBtnTxt = '압축중....';
+        $scope.loading = true;
+        $http.post('/code/zip').then(function(res){
+            $scope.loading = false;
+            $scope.downBtnTxt = '전체다운받기';
+            // res='success:/zips/160728161101_27.zip'
+            if(res.status == 200 && res.data.toString().search('success:') !== -1){
+                var list = res.data.split('success:')
+                var url = list[1]
+                document.location.href=url;
+            }
+        });
+        return false;
+    }
 });
 app.controller('codeCtrl',function($scope, $http){
 	$scope.codes = [];
@@ -25,7 +41,7 @@ app.controller('codeCtrl',function($scope, $http){
 	$http.get('/code').then(function(res){
 		$scope.codes = res.data;
 		$scope.codes.length && $scope.seeDetail($scope.codes[0].id, $scope.codes[0].cdName);
-	})
+	});
 	$scope.codeAdd = function(){
 		$http.post('/code/create',{"codeNumStr":$scope.newCode})
 		.then(function(res){
@@ -56,7 +72,9 @@ app.controller('codeCtrl',function($scope, $http){
 		$http.post('/code/crawl')
 		.then(function(res){
 			$scope.loading = false;
-			$scope.codes = res.data;
+            $http.get('/code').then(function(res){
+                $scope.codes = res.data;
+            });
 		});
 		return false;
 	}

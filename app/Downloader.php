@@ -1,6 +1,8 @@
 <?php
 namespace App;
 
+use Illuminate\Support\Facades\File;
+
 class Downloader
 {
     public $randName = '';
@@ -13,14 +15,44 @@ class Downloader
     public $pathSise = '';
     public $targetDate = '';
     public $pathZipfile = '';
+    public $deleteTime = '';
     public $sep = '|';
     public $sep2 = "\r\n"; // for windows
 
     public function __construct(){
         $this->stPath = storage_path(); // exist
         $this->targetDate = $this->getTargetDate();
+        $this->deleteTime = date('Y-m-d H:i:s' , strtotime('-1 hour'));
         $this->setRandName();
         $this->prefarePath();
+    }
+
+    public function clearFolderFile($folder='',$file=''){
+        if($folder && File::exists($folder) && File::isDirectory($folder)){
+            File::deleteDirectory($folder, $preserve = false);
+        }
+        if($file && File::exists($file) && File::isFile($file)){
+            File::delete($file);
+        }
+    }
+
+    public function deleteDownHistory(){
+        $list = DownloadHistory::where('created_at','<',$this->deleteTime)->get();
+        foreach($list as $item){
+            $folder = $item->dhFolder;
+            $file = $item->dhFileName;
+            $this->clearFolderFile($folder,$file);
+            $item->delete();
+        }
+    }    
+
+    public function saveDownHistory($folder='',$file=''){
+        $this->deleteDownHistory();
+
+        $dh = new DownloadHistory;
+        $dh->dhFolder = $folder;
+        $dh->dhFileName = $file;
+        $dh->save();
     }
 
     public function getTargetDate(){
@@ -79,12 +111,16 @@ class Downloader
     }
 
     public function doDownload(){
+        $this->createFolder();
+        $this->saveDownHistory($this->folderPath, $this->pathZipfile);
+
         $this->prepareCode();
         $this->prepareKospi();
         $this->prepareSise();
         $this->createZip();
 
-        ////////////다운받기
+        list($dummy, $url) = explode('/public', $this->pathZipfile);
+        return $url;
     }
 
     public function createZip(){
@@ -108,8 +144,6 @@ class Downloader
             }
             $contentsStr = implode($this->sep2, $contentsArr);
             \File::put($this->pathCode.'/'.$code->cdNumber.'.txt', $contentsStr);
-            # for testing
-            # break;
         }
     }
 
@@ -129,8 +163,6 @@ class Downloader
             }
             $contentsStr = implode($this->sep2, $contentsArr);
             \File::put($this->pathSise.'/'.$code->cdNumber.'.txt', $contentsStr);
-            # for testing
-            # break;
         }
     }
 
@@ -159,22 +191,21 @@ class Downloader
         }
     }
 
+    public function createFolder(){
+        $this->makeFolder($this->basepath);
+        $this->makeFolder($this->folderPath);
+        $this->makeFolder($this->pathCode);
+        $this->makeFolder($this->pathKospi);
+        $this->makeFolder($this->pathSise);
+        
+    }
+
     public function prefarePath(){
         $this->basepath = $this->stPath.'/filedown';
-        $this->makeFolder($this->basepath);
-
         $this->folderPath = $this->basepath.'/'.$this->getFolderName();
-        $this->makeFolder($this->folderPath);
-
         $this->pathCode = $this->folderPath.'/Code';
-        $this->makeFolder($this->pathCode);
-
         $this->pathKospi = $this->folderPath.'/Kospi';
-        $this->makeFolder($this->pathKospi);
-
         $this->pathSise = $this->folderPath.'/Sise';
-        $this->makeFolder($this->pathSise);
-
         $this->pathZipfile = base_path().'/public/zips/'.$this->setRandName().'.zip';
     }
 

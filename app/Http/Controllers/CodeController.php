@@ -74,6 +74,12 @@ class CodeController extends Controller
         return \App\Code::all();
     }
 
+    public function postZip(){
+        $d = new \App\Downloader;
+        $path = $d->doDownload();
+        return 'success:'.$path;
+    }
+
     public function postCrawl()
     {
         $crawl = new Crawl();

@@ -21,8 +21,8 @@
 				<input type="text" ng-model="searching2" placeholder="검색어를 입력하세요" style="margin-left: 20px;">
 			</div>
 			<div class="row">
-	               <div class="col-xs-6 col-sm-3 col-lg-2 col-md-2 pull-right">
-	                       <div class="input-group input-group-sm">
+	               <div class="col-xs-12 col-sm-8 col-lg-4 col-md-4 pull-right">
+	                       <div class="input-group input-group-md">
 	                               <input type="number" min="1" max="100" class="form-control" ng-model="pageSize" placeholder="페이지당" ng-change=""/>
 	                         <span class="input-group-addon">표시건</span>
 	                       </div>
@@ -61,15 +61,15 @@
                         | orderBy:codeOrder:codeOrderAsc 
                         | itemsPerPage: pageSize
 					 track by code.id" class="{{currentId==code.id?'current-row':''}}" >
-						<td>{{$index + 1}}</td>
+						<td class="textright">{{$index + 1}}</td>
 						<td><a ng-click="seeDetail(code.id, code.cdName)">{{code.cdName}}</a></td>
-						<td>{{code.cdNumber}}</td>
-						<td>{{code.cdRank}}</td>
+						<td class="textcenter"><span class="badge">{{code.cdNumber}}</span></td>
+						<td class="textright">{{code.cdRank}}</td>
 						<td>{{code.cdLastUpdate}}</td>
 						<td>{{code.cdOldUpdate}}</td>
 						<!-- <td>{{code.created_at}}</td>
 						<td>{{code.updated_at}}</td> -->
-						<td>다운로드</td>
+						<td><a ng-click="alert('안만들었음')">다운로드</a></td>
 						<td><a ng-click="delete(code.id)">삭제</a></td>
 					</tr>
 				</tbody>
@@ -97,15 +97,15 @@
 					<tr ng-repeat="day in days 
 						| orderBy:ddDate:true 
 						track by day.id">
-						<td>{{day.ddDate}}</td>
-						<td>{{day.ddJongGa}}</td>
-						<td>{{day.ddJulIlBi}}</td>
-						<td>{{day.ddDeunRakPok}}</td>
-						<td>{{day.ddGeRaeRyang}}</td>
-						<td>{{day.ddSunMaeMae}}</td>
-						<td>{{day.ddForSunMaeMae}}</td>
-						<td>{{day.ddForBoYuJuSu}}</td>
-						<td>{{day.ddforBoYuYul}}</td>
+						<td class="textcenter">{{day.ddDate}}</td>
+						<td class="textright">{{day.ddJongGa | number}}</td>
+						<td class="textright {{day.ddJulIlBi<0?'text-danger':'text-info'}}">{{day.ddJulIlBi | number}}</td>
+						<td class="textright">{{day.ddDeunRakPok | number}}</td>
+						<td class="textright">{{day.ddGeRaeRyang | number}}</td>
+						<td class="textright">{{day.ddSunMaeMae | number}}</td>
+						<td class="textright">{{day.ddForSunMaeMae | number}}</td>
+						<td class="textright">{{day.ddForBoYuJuSu | number}}</td>
+						<td class="textright">{{day.ddforBoYuYul | number}}</td>
 					</tr>
 				</tbody>
 			</table>		
@@ -113,4 +113,6 @@
 		</div>
 	</div>
 	
-	<div ng-init="loading=false" style="display:{{loading?'block':'none'}};top:0;left:0;background:#555;position:fixed;width:100%;height:100%;font-size:50px;color:white;text-align:center;opacity:0.6;transition:all 0.5s ease-out;">로딩중.....</div>
+	<div ng-init="loading=false" class="loadinglayer" style="display:{{loading?'block':'none'}};">
+		<div class="wrap"><div class="txt">로딩중.....</div></div>
+	</div>

@@ -21,8 +21,8 @@
 				<input type="text" ng-model="searching2" placeholder="검색어를 입력하세요" style="margin-left: 20px;">
 			</div>
 			<div class="row">
-	               <div class="col-xs-6 col-sm-3 col-lg-2 col-md-2 pull-right">
-	                       <div class="input-group input-group-sm">
+	               <div class="col-xs-12 col-sm-8 col-lg-4 col-md-4 pull-right">
+	                       <div class="input-group input-group-md">
 	                               <input type="number" min="1" max="100" class="form-control" ng-model="pageSize" placeholder="페이지당" ng-change=""/>
 	                         <span class="input-group-addon">표시건</span>
 	                       </div>
@@ -63,8 +63,8 @@
 					 track by code.id" class="{{currentId==code.id?'current-row':''}}" >
 						<td>{{$index + 1}}</td>
 						<td><a ng-click="seeDetail(code.id, code.cdName)">{{code.cdName}}</a></td>
-						<td>{{code.cdNumber}}</td>
-						<td>{{code.cdRank}}</td>
+						<td class="textcenter"><span class="badge">{{code.cdNumber}}</span></td>
+						<td class="textright">{{code.cdRank}}</td>
 						<td>{{code.cdLastUpdateSise}}</td>
 						<td>{{code.cdOldUpdateSise}}</td>
 						<!-- <td>{{code.created_at}}</td>
@@ -95,13 +95,13 @@
 					<tr ng-repeat="day in days 
 						| orderBy:ddDate:true 
 						track by day.id">
-						<td>{{day.ssDate}}</td>
-						<td>{{day.ssJongGa}}</td>
-						<td>{{day.ssJulIlBi}}</td>
-						<td>{{day.ssSiGa}}</td>
-						<td>{{day.ssGoGa}}</td>
-						<td>{{day.ssJeoGa}}</td>
-						<td>{{day.ssGeRaeRyang}}</td>
+						<td class="textcenter">{{day.ssDate}}</td>
+						<td class="textright">{{day.ssJongGa | number}}</td>
+						<td class="textright {{day.ssJulIlBi<0?'text-danger':'text-info'}}">{{day.ssJulIlBi | number}}</td>
+						<td class="textright">{{day.ssSiGa | number}}</td>
+						<td class="textright">{{day.ssGoGa | number}}</td>
+						<td class="textright">{{day.ssJeoGa | number}}</td>
+						<td class="textright">{{day.ssGeRaeRyang | number}}</td>
 					</tr>
 				</tbody>
 			</table>		
@@ -109,4 +109,6 @@
 		</div>
 	</div>
 	
-	<div ng-init="loading=false" style="display:{{loading?'block':'none'}};top:0;left:0;background:#555;position:fixed;width:100%;height:100%;font-size:50px;color:white;text-align:center;opacity:0.6;transition:all 0.5s ease-out;">로딩중.....</div>
+	<div ng-init="loading=false" class="loadinglayer" style="display:{{loading?'block':'none'}};">
+		<div class="wrap"><div class="txt">로딩중.....</div></div>
+	</div>
