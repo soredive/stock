@@ -184,7 +184,8 @@ class Downloader
             $oldmask = umask(0);
             mkdir($fullpath,0777,true);
             umask($oldmask);    
-        }elseif(! \File::isWritable($fullpath)){
+        }
+        if(! \File::isWritable($fullpath)){
             $oldmask = umask(0);
             chmod($fullpath,0777);
             umask($oldmask);    
@@ -197,6 +198,7 @@ class Downloader
         $this->makeFolder($this->pathCode);
         $this->makeFolder($this->pathKospi);
         $this->makeFolder($this->pathSise);
+        $this->makeFolder(base_path().'/public/zips');
         
     }
 

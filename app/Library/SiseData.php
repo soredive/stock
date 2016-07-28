@@ -17,6 +17,7 @@ class SiseData extends Data {
 	}
 	public function Row2($str, $class = ''){
 		$val = $this->toInt($str);
+		$val *= $this->getPlusMinus($class);
 		return $val;
 	}
 	public function Row3($str){
