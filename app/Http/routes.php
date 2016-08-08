@@ -22,3 +22,6 @@ Route::controller('code', 'CodeController');
 Route::controller('kospi', 'KospiController');
 
 Route::controller('sise', 'SiseController');
+
+// 드림셀파
+Route::controller('called', 'CalledController');

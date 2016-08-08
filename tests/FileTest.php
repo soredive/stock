@@ -4,17 +4,29 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-// use \App\Library\Crawl;
-// use \App\Library\Data;
-// use \App\Code;
-// use \App\DayData;
-// use \App\Kospi;
-// use \App\Downloader;
-
 class FileTest extends TestCase
 {
+	public function testMunja(){
+		$lists = [
+			'who' => '김범석',
+			'phone' => '0101234-5678',
+			'type' => '1',
+		];
+		// $response = $this->call('GET', '/called/sangdam', []);
+		// $this->assertEquals(200, $response->status());
+		// $this->assertEquals('who:  phone:  type: ', $response->getContent());
+		
+		$response = $this->call('GET', '/called/sangdam', $lists);
+		dump($response);
+		$this->assertEquals(200, $response->status());
+		// $this->assertEquals('who: 김범석 phone: 0101234-5678 type: 1', $response->getContent());
+
+		// $d = new \App\Dream('김범석','01012345678','2');
+		// $d->send();
+	}
+
 	public function testTTT(){
-		// $this->markTestSkipped('not need this');
+		$this->markTestSkipped('not need this');
 		$crawl = new \App\Library\SiseCrawl();
         $list = \App\Code::all();
         foreach($list as $no => $code){
