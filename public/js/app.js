@@ -73,9 +73,9 @@ app.controller('codeCtrl',function($scope, $http){
 		$http.post('/code/crawl')
 		.then(function(res){
 			$scope.loading = false;
-            $http.get('/code').then(function(res){
-                $scope.codes = res.data;
-            });
+            $scope.codes = res.data;
+            // $http.get('/code').then(function(res){
+            // });
 		});
 		return false;
 	}
@@ -91,7 +91,8 @@ app.controller('kospiCtrl',function($scope, $http){
     $scope.currentLength = null;
     $http.get('/kospi').then(function(res){
         $scope.datas = res.data;
-        $scope.currentDate = res.data[0].ksDate;
+        if(res.data && res.data[0] && res.data[0].ksDate)
+            $scope.currentDate = res.data[0].ksDate;
         $scope.currentLength = '총'+res.data.length+'건';
     })
     $scope.crawl = function(){
@@ -100,7 +101,8 @@ app.controller('kospiCtrl',function($scope, $http){
         .then(function(res){
             $scope.loading = false;
             $scope.datas = res.data;
-            $scope.currentDate = res.data[0].ksDate;
+            if(res.data && res.data[0] && res.data[0].ksDate)
+                $scope.currentDate = res.data[0].ksDate;
             $scope.currentLength = '총'+res.data.length+'건';
         });
         return false;
