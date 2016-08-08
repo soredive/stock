@@ -25,8 +25,8 @@ class Dream
 
 	public function __construct($who='',$phone='',$type='')
 	{
-		# $this->datas['receiver'] = $this->toReal;
-		$this->datas['receiver'] = $this->toTest;
+		$this->datas['receiver'] = $this->toReal;
+		// $this->datas['receiver'] = $this->toTest;
 		$this->imgPath = base_path().'/resources/img.png';
 
 		$this->who=$who;
@@ -38,18 +38,18 @@ class Dream
 		$this->makeMsg();
 		$this->toeuc();
 
-		$ch = \curl_init();
-		\curl_setopt($ch, CURLOPT_URL, $this->url);
-		\curl_setopt($ch, CURLOPT_POST, 1);
-		\curl_setopt($ch, CURLOPT_POSTFIELDS, $this->datas);
-		\curl_exec($ch);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $this->url);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->datas);
+		curl_exec($ch);
 	}
 
 	public function makeMsg()
 	{
 		$ret = [];
 		$ret[] = $this->type == 1 ? '[전화요청]' : '[견적요청]';
-		$ret[] = $this->who ." 님 (".$this->phone.") 요청입니다 ".date('m월d일 G시i분');
+		$ret[] = $this->who ." 님(".$this->phone.")이 ".($this->type == 1 ? '전화' : '견적')."요청했습니다 ".date('m월d일 G시i분');
 		$msg = implode('', $ret);
 		$this->datas['message'] = $msg;
 		return $this->datas['message'];
