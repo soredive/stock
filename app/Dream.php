@@ -38,11 +38,11 @@ class Dream
 		$this->makeMsg();
 		$this->toeuc();
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $this->url);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->datas);
-		curl_exec($ch);
+		$ch = \curl_init();
+		\curl_setopt($ch, CURLOPT_URL, $this->url);
+		\curl_setopt($ch, CURLOPT_POST, 1);
+		\curl_setopt($ch, CURLOPT_POSTFIELDS, $this->datas);
+		\curl_exec($ch);
 	}
 
 	public function makeMsg()
