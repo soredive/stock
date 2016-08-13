@@ -45,11 +45,17 @@ class Dream
 		curl_exec($ch);
 	}
 
+	public function getTime(){
+		$a=['일','월','화','수','목','금','토'];
+		$b=['am'=>'오전','pm'=>'오후'];
+		return date('n월j일('.$a[date('w')].') '.$b[date('a')].'g시i분');
+	}
+
 	public function makeMsg()
 	{
 		$ret = [];
 		$ret[] = $this->type == 1 ? '[전화요청]' : '[견적요청]';
-		$ret[] = $this->who ." 님(".$this->phone.")이 ".($this->type == 1 ? '전화' : '견적')."요청했습니다 ".date('m월d일 G시i분');
+		$ret[] = $this->who ." 님(".$this->phone.")이 ".($this->type == 1 ? '전화' : '견적')."요청했습니다 ".$this->getTime();
 		$msg = implode('', $ret);
 		$this->datas['message'] = $msg;
 		return $this->datas['message'];
