@@ -10,7 +10,8 @@ var reload = browserSync.reload;
 gulp.task('server', ['uglify', 'minifycss'], function () {
 	return browserSync.init({
                 port:8080,
-                proxy:'localhost',
+                // proxy:'localhost',
+                proxy:'http://dreamsherpa.co.kr',
                 notify: false,
                 logConnections: false,
                 logPrefix: 'laravel elixir browserSync',
