@@ -25,4 +25,13 @@ class CalledController extends Controller
 		];
 		return response()->download($d->imgPath, 'a.png', $header);
 	}
+
+	public function getMunja(){
+    	$who = Input::get('who','');
+    	$phone = Input::get('phone','');
+		$type = Input::get('type','');
+		$d = new \App\Dream($who,$phone,$type);
+		$d->send();
+		return "1";
+	}
 }
