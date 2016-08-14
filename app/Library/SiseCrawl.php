@@ -70,6 +70,7 @@ class SiseCrawl implements CrawlInterface{
 		$this->chkDone = false;
 		$this->going = true;
 		$this->goCnt = 0;
+		$this->SangJangFeJi = false;
 	}
 
 	public function fromCode($code){
@@ -167,16 +168,51 @@ class SiseCrawl implements CrawlInterface{
 			}
 				
             $data['ssDate'] = $this->processData->Row0($spans->eq(0)->text());
+            if($data['ssDate'] == 'error'){
+            	# 이상한 값을 만날경우 상장 폐지입니다
+            	# 상장 폐지될 경우 다음 정상적인 날자를 만나면 0 으로 모든 숫자를 입력한다
+            	$this->SangJangFeJi = true;
+            	return true;
+            }
             $data['ssJongGa'] = $this->processData->Row1($spans->eq(1)->text());
             $data['ssJulIlBi'] = $this->processData->Row2($spans->eq(2)->text(), $spans->eq(2)->attr('class'));
             $data['ssSiGa'] = $this->processData->Row3($spans->eq(3)->text());
             $data['ssGoGa'] = $this->processData->Row4($spans->eq(4)->text());
             $data['ssJeoGa'] = $this->processData->Row5($spans->eq(5)->text());
             $data['ssGeRaeRyang'] = $this->processData->Row6($spans->eq(6)->text());
+
+            if($this->SangJangFeJi == true){
+            	$this->SangJangFeJi = false;
+            	#  상장 폐지된 경우 0으로 모든 데이터를 채운 값을 넣어줍니다
+            	$newData = [];
+            	$newData['code'] = $this->currentCode;
+            	$newData['codeIdx'] = $this->currentCodeIdx;
+            	$newData['ssDate'] = date('ymd',strtotime('+1 day',
+            		strtotime(
+            			substr($data['ssDate'], 0, 2) . '-' . substr($data['ssDate'], 2, 2) . '-' . substr($data['ssDate'], 4, 2)
+            		)
+            	));
+            	$newData['ssJongGa'] = 0;
+            	$newData['ssJulIlBi'] = 0;
+            	$newData['ssSiGa'] = 0;
+            	$newData['ssGoGa'] = 0;
+            	$newData['ssJeoGa'] = 0;
+            	$newData['ssGeRaeRyang'] = 0;
+            	if($this->checkDone($newData['ssDate'])){
+            	 	$this->chkDone = true;
+            	 	return true;
+            	}else{
+            		echo $newData['ssDate'].'>>>>'."\n";
+            	 	if($this->lastestDate < $newData['ssDate']){
+            	 		$this->lastestDate = $newData['ssDate'];
+            	 	}
+            			$this->oldestDate = $newData['ssDate'];
+            	 	$this->tempData[] = $newData;	
+            	}	
+            }
             
             if($this->checkDone($data['ssDate'])){
             	$this->chkDone = true;
-            	// echo 'Done!!!'.$data['ssDate'].'<--';
             }else{
             	if($this->lastestDate < $data['ssDate']){
             		$this->lastestDate = $data['ssDate'];

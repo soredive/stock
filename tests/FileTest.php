@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class FileTest extends TestCase
 {
 	public function testMunja(){
+		$this->markTestSkipped('not need this');
 		$lists = [
 			'who' => '김범석',
 			'phone' => '0101234-5678',

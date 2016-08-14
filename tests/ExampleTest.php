@@ -25,56 +25,25 @@ class ExampleTest extends TestCase
 	public $stock;
 	public $crawl;
 
-	public function codeTest(){
-		$this->markTestSkipped('code spec is ok');
+    // 상장폐지 테스트
+    public function testPeji(){
+        // $this->markTestSkipped('code spec is ok');
+        $crawl = new \App\Library\SiseCrawl();
+        $cd = Code::where('cdNumber','=','019300')->first();
+        $result = $crawl->getCodeData($cd);
+        dump($result);
+        $this->assertEquals(true, count($result) > 0);
+    }
 
-		Code::firstOrCreate([
-			"cdNumber"=>'123456'
-		]);
-		$list = Code::get()->lists('cdNumber')->toArray();
-		$this->assertEquals(['123456'],$list);
-		
-		$list = Code::all()->toArray();
-		$key = $list[0]['id'];
-		Code::where('id','=',$key)->delete();
-		$list = Code::all()->toArray();
-		$this->assertEquals([],$list);
+    /// 폼 전송 테스트
+    public function testForm(){
+        $this->markTestSkipped('code spec is ok');
 
-		Code::add('456789');
-		$list = Code::get()->lists('cdNumber')->toArray();
-		$this->assertEquals(['456789'],$list);
+        $c = new \Goutte\Client;
+        $f = $c->request('GET','http://finance.naver.com/sise/sise_market_sum.nhn')->filter('form[name=field_form]');
+        $f = $f->form();
 
-		Code::remove('456789');
-		$list = Code::all()->toArray();
-		$this->assertEquals([],$list);
-
-		Code::add('123');
-		Code::add('456');
-		Code::add('789');
-		$list = array_values(Code::lists());
-		
-		$this->assertEquals(3,count($list));
-		Code::remove('123');
-		Code::remove('456');
-		Code::remove('789');
-
-		// print_r($list);
-	}
-
-	public function testMonth(){
-		$this->markTestSkipped('month calc spec is ok');
-		$crawl = new \App\Library\Crawl('051360');
-		echo $crawl->targetDate;
-		$this->assertEquals(false,$crawl->checkDone('160712'));
-		$this->assertEquals(false,$crawl->checkDone('160612'));
-		$this->assertEquals(false,$crawl->checkDone('160512'));
-		$this->assertEquals(false,$crawl->checkDone('160412'));
-		$this->assertEquals(false,$crawl->checkDone('160312'));
-		$this->assertEquals(false,$crawl->checkDone('160212'));
-		$this->assertEquals(true,$crawl->checkDone('160112'));
-		$this->assertEquals(false,$crawl->checkDone('180612'));
-		$this->assertEquals(true,$crawl->checkDone('11022612'));
-	}
+    }
 
 	public function testDataProcess(){
 		$this->markTestSkipped('dataprocess spec is ok');
