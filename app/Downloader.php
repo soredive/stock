@@ -143,7 +143,7 @@ class Downloader
                 }
             }
             $contentsStr = implode($this->sep2, $contentsArr);
-            \File::put($this->pathCode.'/'.$code->cdNumber.'.txt', $contentsStr);
+            \File::put($this->pathCode.'/'.$code->cdNumber.'.txt', utf16($contentsStr));
         }
     }
 
@@ -162,7 +162,7 @@ class Downloader
                 }
             }
             $contentsStr = implode($this->sep2, $contentsArr);
-            \File::put($this->pathSise.'/'.$code->cdNumber.'.txt', $contentsStr);
+            \File::put($this->pathSise.'/'.$code->cdNumber.'.txt', utf16($contentsStr));
         }
     }
 
@@ -176,7 +176,8 @@ class Downloader
         foreach($list as $item){
             $arr[] = $this->formatKospi($item);
         }
-        \File::put($this->pathKospi.'/'.$lastDate.'.txt', implode($this->sep2, $arr));
+        // \File::put($this->pathKospi.'/'.$lastDate.'.txt', implode($this->sep2, $arr));
+        \File::put($this->pathKospi.'.txt', utf16(implode($this->sep2, $arr)));
     }
 
     public function makeFolder($fullpath){
@@ -214,4 +215,18 @@ class Downloader
     public function getFolderName(){
         return $this->setRandName();
     }
+}
+
+function chbo($num) {
+    $data = dechex($num);
+    if (strlen($data) <= 2) {
+        return $num;
+    }
+    $u = unpack("H*", strrev(pack("H*", $data)));
+    $f = hexdec($u[1]);
+    return $f;
+}
+
+function utf16($str){
+    return pack("S",0xfeff). chbo(iconv("UTF-8","UTF-16LE",$str));
 }

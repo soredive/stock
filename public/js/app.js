@@ -131,6 +131,7 @@ app.controller('siseCtrl',function($scope, $http){
         return false;
     }
     $scope.delete = function(codeid){
+        if(!confirm('왠만하면 삭제는 하지 마세요\n삭제하시겠습니까?')) return;
         $http.post('/code/destroy',{"codeId":codeid})
         .then(function(res){
             if(res.status==200)
