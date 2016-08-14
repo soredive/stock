@@ -143,7 +143,7 @@ class Downloader
                 }
             }
             $contentsStr = implode($this->sep2, $contentsArr);
-            \File::put($this->pathCode.'/'.$code->cdNumber.'.txt', utf16($contentsStr));
+            \File::put($this->pathCode.'/'.$code->cdNumber.'.txt', $contentsStr);
         }
     }
 
@@ -162,7 +162,7 @@ class Downloader
                 }
             }
             $contentsStr = implode($this->sep2, $contentsArr);
-            \File::put($this->pathSise.'/'.$code->cdNumber.'.txt', utf16($contentsStr));
+            \File::put($this->pathSise.'/'.$code->cdNumber.'.txt', $contentsStr);
         }
     }
 
@@ -176,8 +176,8 @@ class Downloader
         foreach($list as $item){
             $arr[] = $this->formatKospi($item);
         }
-        // \File::put($this->pathKospi.'/'.$lastDate.'.txt', implode($this->sep2, $arr));
-        \File::put($this->pathKospi.'.txt', utf16(implode($this->sep2, $arr)));
+        # \File::put($this->pathKospi.'/'.$lastDate.'.txt', implode($this->sep2, $arr));
+        \File::put($this->pathKospi.'/kospi.txt', utf16(implode($this->sep2, $arr)));
     }
 
     public function makeFolder($fullpath){
