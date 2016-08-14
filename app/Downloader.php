@@ -205,7 +205,7 @@ class Downloader
     public function prefarePath(){
         $this->basepath = $this->stPath.'/filedown';
         $this->folderPath = $this->basepath.'/'.$this->getFolderName();
-        $this->pathCode = $this->folderPath.'/Code';
+        $this->pathCode = $this->folderPath.'/Who';
         $this->pathKospi = $this->folderPath.'/Kospi';
         $this->pathSise = $this->folderPath.'/Sise';
         $this->pathZipfile = base_path().'/public/zips/'.$this->setRandName().'.zip';
