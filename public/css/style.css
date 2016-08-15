@@ -60,3 +60,6 @@ body{min-height: 1000px;}
 .textcenter{
     text-align: center;
 }
+.table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
+    min-width: 100px;
+}
