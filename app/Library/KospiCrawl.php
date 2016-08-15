@@ -78,7 +78,9 @@ class KospiCrawl extends \App\Library\Crawl{
 		if(!$url){
 			$url = $this->getUrl();	
 		}
-		$crawler = $this->client->request('GET',$url);
+		$crawler = $this->client->request('GET',$url,[],[],[
+            'HTTP_COOKIE'=>'field_list=12|07ffffff'
+        ]);
 		
 		$table = $crawler->filter('#contentarea table.type_2 tbody');
 		$str = '';
@@ -115,12 +117,36 @@ class KospiCrawl extends \App\Library\Crawl{
 			$data['ksJulIlBi'] = $this->processData->Row3($tds->eq(3)->filter('span')->text(), $tds->eq(3)->filter('span')->attr('class'));
 			$data['ksDeunRakPok'] = $this->processData->Row4($tds->eq(4)->text());
 			$data['ksAekMyunGa'] = $this->processData->Row5($tds->eq(5)->text());
-			$data['ksSiGaChongAek'] = $this->processData->Row6($tds->eq(6)->text());
-			$data['ksSangJangJuSu'] = $this->processData->Row7($tds->eq(7)->text());
-			$data['ksForBiYul'] = $this->processData->Row8($tds->eq(8)->text());
-			$data['ksGaeRaeRyang'] = $this->processData->Row9($tds->eq(9)->text());
-			$data['ksPER'] = $this->processData->Row10($tds->eq(10)->text());
-			$data['ksROE'] = $this->processData->Row11($tds->eq(11)->text());
+			$data['ksGaeRaeRyang'] = $this->processData->Row9($tds->eq(6)->text());
+
+			$data['ksGaeRaeDaeGueam'] = $this->processData->toInt($tds->eq(7)->text());
+            $data['ksJunIlGaeRaeRyang'] = $this->processData->toInt($tds->eq(8)->text());
+            $data['ksSiGa'] = $this->processData->toInt($tds->eq(9)->text());
+            $data['ksGoGa'] = $this->processData->toInt($tds->eq(10)->text());
+            $data['ksJeoGa'] = $this->processData->toInt($tds->eq(11)->text());
+            $data['ksMaeSuHoGa'] = $this->processData->toInt($tds->eq(12)->text());
+            $data['ksMaeDoHoGa'] = $this->processData->toInt($tds->eq(13)->text());
+            $data['ksMaeSuChongJanRyang'] = $this->processData->toInt($tds->eq(14)->text());
+            $data['ksMaeDoChongJanRyang'] = $this->processData->toInt($tds->eq(15)->text());
+            $data['ksMaeChulAek'] = $this->processData->toInt($tds->eq(18)->text());
+            $data['ksJaSanChongGae'] = $this->processData->toInt($tds->eq(19)->text());
+            $data['ksBuChaeChongGae'] = $this->processData->toInt($tds->eq(20)->text());
+            $data['ksYungUpEaIk'] = $this->processData->toInt($tds->eq(21)->text());
+            $data['ksDangGiSunEaIk'] = $this->processData->toInt($tds->eq(22)->text());
+            $data['ksJuDangSunEaIk'] = $this->processData->toInt($tds->eq(23)->text());
+            $data['ksBoTongJuBaeDangGuem'] = $this->processData->toInt($tds->eq(24)->text());
+            $data['ksMaeCulAekJungGaYul'] = $this->processData->toFloat($tds->eq(25)->text());
+            $data['ksYoungUpEaIkJungGaYul'] = $this->processData->toFloat($tds->eq(26)->text());
+            $data['ksROA'] = $this->processData->toFloat($tds->eq(30)->text());
+            $data['ksPBR'] = $this->processData->toFloat($tds->eq(31)->text());
+            $data['ksYuBoYul'] = $this->processData->toFloat($tds->eq(32)->text());
+
+			$data['ksSangJangJuSu'] = $this->processData->Row7($tds->eq(16)->text());
+			$data['ksSiGaChongAek'] = $this->processData->Row6($tds->eq(17)->text());
+
+			$data['ksForBiYul'] = $this->processData->Row8($tds->eq(27)->text());
+			$data['ksPER'] = $this->processData->Row10($tds->eq(28)->text());
+			$data['ksROE'] = $this->processData->Row11($tds->eq(29)->text());
 
 			if($idx == 0 || $idx == 1){
 				$testingDuplicate = \App\Kospi::whereRaw('ksCode = ? and ksDate = ?',array($data['ksCode'], $data['ksDate']))->count();

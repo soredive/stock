@@ -14,7 +14,7 @@ body{min-height: 1000px;}
 }
 
 .leftwrap{
-    position: relative;width: 100%;height: 100%;
+    position: relative;width: 100%;height: 100%;background: white;
 }
 .downbtn{
     left: 50%;

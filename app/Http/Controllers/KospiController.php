@@ -11,7 +11,11 @@ class KospiController extends Controller
     //
     public function getIndex(){
     	// return \App\Kospi::all();
-    	return \App\Kospi::where('ksDate','=',date('ymd'))->get();
+    	$lastDate = \App\Kospi::orderBy('ksDate','desc')->limit(1)->first()->ksDate;
+        if(!$lastDate){
+            throw new \Execption('no last date');
+        }
+        return \App\Kospi::where('ksDate','=',$lastDate)->orderBy('ksRank','asc')->get();
     }
 
     public function postCrawl(){
@@ -36,9 +40,29 @@ class KospiController extends Controller
 				,'ksGaeRaeRyang' => $item['ksGaeRaeRyang']
 				,'ksPER' => $item['ksPER']
 				,'ksROE' => $item['ksROE']
+				,'ksGaeRaeDaeGueam' => $item['ksGaeRaeDaeGueam']
+				,'ksJunIlGaeRaeRyang' => $item['ksJunIlGaeRaeRyang']
+				,'ksSiGa' => $item['ksSiGa']
+				,'ksGoGa' => $item['ksGoGa']
+				,'ksJeoGa' => $item['ksJeoGa']
+				,'ksMaeSuHoGa' => $item['ksMaeSuHoGa']
+				,'ksMaeDoHoGa' => $item['ksMaeDoHoGa']
+				,'ksMaeSuChongJanRyang' => $item['ksMaeSuChongJanRyang']
+				,'ksMaeDoChongJanRyang' => $item['ksMaeDoChongJanRyang']
+				,'ksMaeChulAek' => $item['ksMaeChulAek']
+				,'ksJaSanChongGae' => $item['ksJaSanChongGae']
+				,'ksBuChaeChongGae' => $item['ksBuChaeChongGae']
+				,'ksYungUpEaIk' => $item['ksYungUpEaIk']
+				,'ksDangGiSunEaIk' => $item['ksDangGiSunEaIk']
+				,'ksJuDangSunEaIk' => $item['ksJuDangSunEaIk']
+				,'ksBoTongJuBaeDangGuem' => $item['ksBoTongJuBaeDangGuem']
+				,'ksMaeCulAekJungGaYul' => $item['ksMaeCulAekJungGaYul']
+				,'ksYoungUpEaIkJungGaYul' => $item['ksYoungUpEaIkJungGaYul']
+				,'ksROA' => $item['ksROA']
+				,'ksPBR' => $item['ksPBR']
+				,'ksYuBoYul' => $item['ksYuBoYul']
 			));
         }
         return \App\Kospi::where('ksDate','=',date('ymd'))->get();
     }
-
 }

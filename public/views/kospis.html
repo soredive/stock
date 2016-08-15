@@ -2,7 +2,7 @@
 	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-12 col-lg-offset-2 col-md-offset-2 col-sm-offset-1">
 		<div class="well">
 			<center>
-				>>> 코스피 {{currentDate}} <<<
+				>>> 코스피 최근 데이터: {{currentDate}} <<<
 				<span style="float:right">{{currentLength}}</span>
 			</center>
 			<br>
@@ -61,26 +61,138 @@
 						<i ng-if="codeOrder == 'ksAekMyunGa';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
 							</a>
 					</th>
+
 					<th>
-						<a ng-click="codeOrder='ksSiGaChongAek';codeOrderAsc=!codeOrderAsc;">시가총액
-						<i ng-if="codeOrder == 'ksSiGaChongAek';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						<a ng-click="codeOrder='ksGaeRaeRyang';codeOrderAsc=!codeOrderAsc;">거래량
+						<i ng-if="codeOrder == 'ksGaeRaeRyang';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
 							</a>
 					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksGaeRaeDaeGueam';codeOrderAsc=!codeOrderAsc;">거래대금
+						<i ng-if="codeOrder == 'ksGaeRaeDaeGueam';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksJunIlGaeRaeRyang';codeOrderAsc=!codeOrderAsc;">전일거래량
+						<i ng-if="codeOrder == 'ksJunIlGaeRaeRyang';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksSiGa';codeOrderAsc=!codeOrderAsc;">시가
+						<i ng-if="codeOrder == 'ksSiGa';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksGoGa';codeOrderAsc=!codeOrderAsc;">고가
+						<i ng-if="codeOrder == 'ksGoGa';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksJeoGa';codeOrderAsc=!codeOrderAsc;">저가
+						<i ng-if="codeOrder == 'ksJeoGa';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksMaeSuHoGa';codeOrderAsc=!codeOrderAsc;">매수호가
+						<i ng-if="codeOrder == 'ksMaeSuHoGa';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksMaeDoHoGa';codeOrderAsc=!codeOrderAsc;">매도호가
+						<i ng-if="codeOrder == 'ksMaeDoHoGa';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksMaeSuChongJanRyang';codeOrderAsc=!codeOrderAsc;">매수총잔량
+						<i ng-if="codeOrder == 'ksMaeSuChongJanRyang';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksMaeDoChongJanRyang';codeOrderAsc=!codeOrderAsc;">매도총잔량
+						<i ng-if="codeOrder == 'ksMaeDoChongJanRyang';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
 					<th>
 						<a ng-click="codeOrder='ksSangJangJuSu';codeOrderAsc=!codeOrderAsc;">상장주식수
 						<i ng-if="codeOrder == 'ksSangJangJuSu';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
 							</a>
 					</th>
 					<th>
+						<a ng-click="codeOrder='ksSiGaChongAek';codeOrderAsc=!codeOrderAsc;">시가총액
+						<i ng-if="codeOrder == 'ksSiGaChongAek';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+							</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksMaeChulAek';codeOrderAsc=!codeOrderAsc;">매출액
+						<i ng-if="codeOrder == 'ksMaeChulAek';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksJaSanChongGae';codeOrderAsc=!codeOrderAsc;">자산총액
+						<i ng-if="codeOrder == 'ksJaSanChongGae';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksBuChaeChongGae';codeOrderAsc=!codeOrderAsc;">부채총계
+						<i ng-if="codeOrder == 'ksBuChaeChongGae';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksYungUpEaIk';codeOrderAsc=!codeOrderAsc;">영업이익
+						<i ng-if="codeOrder == 'ksYungUpEaIk';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksDangGiSunEaIk';codeOrderAsc=!codeOrderAsc;">당기손이익
+						<i ng-if="codeOrder == 'ksDangGiSunEaIk';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksJuDangSunEaIk';codeOrderAsc=!codeOrderAsc;">주당손이익
+						<i ng-if="codeOrder == 'ksJuDangSunEaIk';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksBoTongJuBaeDangGuem';codeOrderAsc=!codeOrderAsc;">보통주배당금
+						<i ng-if="codeOrder == 'ksBoTongJuBaeDangGuem';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksMaeCulAekJungGaYul';codeOrderAsc=!codeOrderAsc;">매출액 증가율
+						<i ng-if="codeOrder == 'ksMaeCulAekJungGaYul';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksYoungUpEaIkJungGaYul';codeOrderAsc=!codeOrderAsc;">영업이익 증가율
+						<i ng-if="codeOrder == 'ksYoungUpEaIkJungGaYul';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
 						<a ng-click="codeOrder='ksForBiYul';codeOrderAsc=!codeOrderAsc;">외국인비율
 						<i ng-if="codeOrder == 'ksForBiYul';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
 							</a>
 					</th>
-					<th>
-						<a ng-click="codeOrder='ksGaeRaeRyang';codeOrderAsc=!codeOrderAsc;">거래량
-						<i ng-if="codeOrder == 'ksGaeRaeRyang';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
-							</a>
-					</th>
+					
 					<th>
 						<a ng-click="codeOrder='ksPER';codeOrderAsc=!codeOrderAsc;">PER
 						<i ng-if="codeOrder == 'ksPER';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
@@ -90,6 +202,24 @@
 						<a ng-click="codeOrder='ksROE';codeOrderAsc=!codeOrderAsc;">ROE
 						<i ng-if="codeOrder == 'ksROE';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
 							</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksROA';codeOrderAsc=!codeOrderAsc;">ROA
+						<i ng-if="codeOrder == 'ksROA';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksPBR';codeOrderAsc=!codeOrderAsc;">PBR
+						<i ng-if="codeOrder == 'ksPBR';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
+					</th>
+
+					<th>
+						<a ng-click="codeOrder='ksYuBoYul';codeOrderAsc=!codeOrderAsc;">유보율
+						<i ng-if="codeOrder == 'ksYuBoYul';" class="glyphicon glyphicon-chevron-{{codeOrderAsc?'up':'down'}}"></i>
+						</a>
 					</th>
 				</tr>
 			</thead>
@@ -107,12 +237,36 @@
 					<td class="textright {{item.ksJulIlBi<0?'text-danger':'text-info'}}">{{item.ksJulIlBi | number}}</td>
 					<td class="textright">{{item.ksDeunRakPok | number}}</td>
 					<td class="textright">{{item.ksAekMyunGa | number}}</td>
-					<td class="textright">{{item.ksSiGaChongAek | number}}</td>
-					<td class="textright">{{item.ksSangJangJuSu | number}}</td>
-					<td class="textright">{{item.ksForBiYul | number}}%</td>
 					<td class="textright">{{item.ksGaeRaeRyang | number}}</td>
+
+					<td class="textright">{{item.ksGaeRaeDaeGueam | number}}</td>
+					<td class="textright">{{item.ksJunIlGaeRaeRyang | number}}</td>
+					<td class="textright">{{item.ksSiGa | number}}</td>
+					<td class="textright">{{item.ksGoGa | number}}</td>
+					<td class="textright">{{item.ksJeoGa | number}}</td>
+					<td class="textright">{{item.ksMaeSuHoGa | number}}</td>
+					<td class="textright">{{item.ksMaeDoHoGa | number}}</td>
+					<td class="textright">{{item.ksMaeSuChongJanRyang | number}}</td>
+					<td class="textright">{{item.ksMaeDoChongJanRyang | number}}</td>
+
+					<td class="textright">{{item.ksSangJangJuSu | number}}</td>
+					<td class="textright">{{item.ksSiGaChongAek | number}}</td>
+					
+					<td class="textright">{{item.ksMaeChulAek | number}}</td>
+					<td class="textright">{{item.ksJaSanChongGae | number}}</td>
+					<td class="textright">{{item.ksBuChaeChongGae | number}}</td>
+					<td class="textright">{{item.ksYungUpEaIk | number}}</td>
+					<td class="textright">{{item.ksDangGiSunEaIk | number}}</td>
+					<td class="textright">{{item.ksJuDangSunEaIk | number}}</td>
+					<td class="textright">{{item.ksBoTongJuBaeDangGuem | number}}</td>
+					<td class="textright">{{item.ksMaeCulAekJungGaYul | number}}</td>
+					<td class="textright">{{item.ksYoungUpEaIkJungGaYul | number}}</td>
+					<td class="textright">{{item.ksForBiYul | number}}%</td>
 					<td class="textright">{{item.ksPER | number}}</td>
 					<td class="textright">{{item.ksROE | number}}</td>
+					<td class="textright">{{item.ksROA | number}}</td>
+					<td class="textright">{{item.ksPBR | number}}</td>
+					<td class="textright">{{item.ksYuBoYul | number}}</td>
 				</tr>
 			</tbody>
 		</table>

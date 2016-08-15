@@ -102,12 +102,36 @@ class Downloader
         $item->ksJulIlBi . $this->sep .
         $item->ksDeunRakPok . $this->sep .
         $item->ksAekMyunGa . $this->sep .
-        $item->ksSiGaChongAek . $this->sep .
-        $item->ksSangJangJuSu . $this->sep .
-        $item->ksForBiYul . $this->sep .
         $item->ksGaeRaeRyang . $this->sep .
+
+        $item->ksGaeRaeDaeGueam . $this->sep .
+        $item->ksJunIlGaeRaeRyang . $this->sep .
+        $item->ksSiGa . $this->sep .
+        $item->ksGoGa . $this->sep .
+        $item->ksJeoGa . $this->sep .
+        $item->ksMaeSuHoGa . $this->sep .
+        $item->ksMaeDoHoGa . $this->sep .
+        $item->ksMaeSuChongJanRyang . $this->sep .
+        $item->ksMaeDoChongJanRyang . $this->sep .
+        $item->ksSangJangJuSu . $this->sep .
+        $item->ksSiGaChongAek . $this->sep .
+        $item->ksMaeChulAek . $this->sep .
+        $item->ksJaSanChongGae . $this->sep .
+        $item->ksBuChaeChongGae . $this->sep .
+        $item->ksYungUpEaIk . $this->sep .
+        $item->ksDangGiSunEaIk . $this->sep .
+        $item->ksJuDangSunEaIk . $this->sep .
+        $item->ksBoTongJuBaeDangGuem . $this->sep .
+        $item->ksMaeCulAekJungGaYul . $this->sep .
+        $item->ksYoungUpEaIkJungGaYul . $this->sep .
+
+        $item->ksForBiYul . $this->sep .
         $item->ksPER . $this->sep . 
-        $item->ksROE;
+        $item->ksROE . $this->sep . 
+
+        $item->ksROA . $this->sep .
+        $item->ksPBR . $this->sep .
+        $item->ksYuBoYul;
     }
 
     public function doDownload(){
@@ -176,7 +200,6 @@ class Downloader
         foreach($list as $item){
             $arr[] = $this->formatKospi($item);
         }
-        # \File::put($this->pathKospi.'/'.$lastDate.'.txt', implode($this->sep2, $arr));
         \File::put($this->pathKospi.'/kospi.txt', utf16(implode($this->sep2, $arr)));
     }
 

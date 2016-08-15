@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Kospi extends Model
 {
     protected $table = 'ksKospi';
-	protected $fillable = array(
+	protected $fillable = [
 		'stCodeIdx'
 		,'ksDate'
 		,'ksCode'
@@ -17,13 +17,34 @@ class Kospi extends Model
 		,'ksJulIlBi'
 		,'ksDeunRakPok'
 		,'ksAekMyunGa'
-		,'ksSiGaChongAek'
-		,'ksSangJangJuSu'
-		,'ksForBiYul'
 		,'ksGaeRaeRyang'
+		,'ksGaeRaeDaeGueam'
+		,'ksJunIlGaeRaeRyang'
+		,'ksSiGa'
+		,'ksGoGa'
+		,'ksJeoGa'
+		,'ksMaeSuHoGa'
+		,'ksMaeDoHoGa'
+		,'ksMaeSuChongJanRyang'
+		,'ksMaeDoChongJanRyang'
+		,'ksSangJangJuSu'
+		,'ksSiGaChongAek'
+		,'ksMaeChulAek'
+		,'ksJaSanChongGae'
+		,'ksBuChaeChongGae'
+		,'ksYungUpEaIk'
+		,'ksDangGiSunEaIk'
+		,'ksJuDangSunEaIk'
+		,'ksBoTongJuBaeDangGuem'
+		,'ksMaeCulAekJungGaYul'
+		,'ksYoungUpEaIkJungGaYul'
+		,'ksForBiYul'
 		,'ksPER'
 		,'ksROE'
-	);
+		,'ksROA'
+		,'ksPBR'
+		,'ksYuBoYul'
+	];
 	protected $guarded = array('id');
 	protected $casts = [
 	    // 'is_admin' => 'boolean',

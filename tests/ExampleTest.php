@@ -9,6 +9,8 @@ use \App\Library\Data;
 use \App\Code;
 use \App\DayData;
 
+use \Symfony\Component\BrowserKit\Cookie;
+
 class ExampleTest extends TestCase
 {
 	/**
@@ -21,13 +23,48 @@ class ExampleTest extends TestCase
 	//     $this->visit('/')
 	//          ->see('Laravel 5');
 	// }
-	public $code;
-	public $stock;
-	public $crawl;
+
+    /// 쿠키 전송 테스트
+    public function testCookieSise(){
+        $this->markTestSkipped('code spec is ok');
+        $url  = 'http://finance.naver.com/sise/sise_market_sum.nhn';
+        $client = new \Goutte\Client();
+        $crawler = $client->request('GET',$url,[],[],[
+            'HTTP_COOKIE'=>'field_list=12|07ffffff'
+        ]);
+        $table = $crawler->filter('table')->eq(1);
+        $tr = $table->filter('tr')->eq(0);
+        $list = [];
+        $ths = $tr->filter('th');
+        $list = $ths->each(function(\Symfony\Component\DomCrawler\Crawler $th, $idx){
+            return  $th->text();
+        });
+        dump($list);
+        $this->assertGreaterThan(13, count($list));
+    }
+
+    /// 쿠키 전송 테스트
+    public function testForm(){
+        $this->markTestSkipped('code spec is ok');
+        $url  = 'http://finance.naver.com/sise/sise_market_sum.nhn';
+        $client = new \Goutte\Client();
+        $crawler = $client->request('GET',$url,[],[],[
+            'HTTP_COOKIE'=>'field_list=12|07ffffff'
+        ]);
+        $table = $crawler->filter('table')->eq(1);
+        $tr = $table->filter('tr')->eq(0);
+        $list = [];
+        $ths = $tr->filter('th');
+        $list = $ths->each(function(\Symfony\Component\DomCrawler\Crawler $th, $idx){
+            return  $th->text();
+        });
+        dump($list);
+        $this->assertGreaterThan(13, count($list));
+    }
 
     // 상장폐지 테스트
     public function testPeji(){
-        // $this->markTestSkipped('code spec is ok');
+        $this->markTestSkipped('code spec is ok');
         $crawl = new \App\Library\SiseCrawl();
         $cd = Code::where('cdNumber','=','019300')->first();
         $result = $crawl->getCodeData($cd);
@@ -35,15 +72,6 @@ class ExampleTest extends TestCase
         $this->assertEquals(true, count($result) > 0);
     }
 
-    /// 폼 전송 테스트
-    public function testForm(){
-        $this->markTestSkipped('code spec is ok');
-
-        $c = new \Goutte\Client;
-        $f = $c->request('GET','http://finance.naver.com/sise/sise_market_sum.nhn')->filter('form[name=field_form]');
-        $f = $f->form();
-
-    }
 
 	public function testDataProcess(){
 		$this->markTestSkipped('dataprocess spec is ok');

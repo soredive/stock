@@ -26,7 +26,7 @@ class CodeController extends Controller
     {
         return \App\Code::all();
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -82,7 +82,7 @@ class CodeController extends Controller
 
     public function postCrawl()
     {
-        $crawl = new Crawl();
+        $crawl = new \App\Library\Crawl();
         foreach(Code::all() as $code){
         	$crawl->reset();
         	$result = $crawl->getCodeData($code);
@@ -91,7 +91,7 @@ class CodeController extends Controller
 	        foreach ($result as $key => $value) {
                 $exist = \App\DayData::whereRaw('stCodeIdx = ? and ddDate = ?',array($value['codeIdx'],$value['ddDate']))->count();
                 if($exist < 1){
-                    DayData::create(array(
+                    \App\DayData::create(array(
                         'stCodeIdx'=>$value['codeIdx']
                         ,'ddDate'=>$value['ddDate']
                         ,'ddJongGa'=>$value['ddJongGa']
