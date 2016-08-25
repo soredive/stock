@@ -56,7 +56,7 @@ class Downloader
     }
 
     public function getTargetDate(){
-        return date("ymd", strtotime('-6 month'));
+        return date("ymd", strtotime('-12 month'));
     }
 
     public function setRandName(){
