@@ -74,7 +74,7 @@ class Kernel extends ConsoleKernel
 
 
             $crawl = new \App\Library\Crawl();
-            foreach(Code::all() as $code){
+            foreach(\App\Code::all() as $code){
                 $crawl->reset();
                 $result = $crawl->getCodeData($code);
                 $code->saveUpdateDate($crawl->oldestDate, $crawl->lastestDate);
