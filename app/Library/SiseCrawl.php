@@ -118,7 +118,7 @@ class SiseCrawl implements CrawlInterface{
 	}
 
 	public function getMonthDate(){
-		return date("ymd", strtotime('-6 month'));
+		return date("ymd", strtotime('-12 month'));
 	}
 
 	public function rowCheck($idx){
