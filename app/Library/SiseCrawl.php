@@ -4,14 +4,14 @@ namespace App\Library;
 // use \anlutro\cURL\cURL;
 use \Goutte\Client;
 use \App\Exceptions\Handler;
-
+/*
 interface CrawlInterface {
 	public function getHtml($url);
 	public function getUrl();
 	public function rowCheck($idx);
 }
-
-class SiseCrawl implements CrawlInterface{
+*/
+class SiseCrawl /*implements CrawlInterface*/{
 	protected $baseUrl = 'http://finance.naver.com/item/sise_day.nhn';
 	protected $validRow = [
 		2,3,4,5,6,
