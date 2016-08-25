@@ -2,6 +2,10 @@
 .table tr:hover{background-color:#c9d8c5 !important;}
 a{cursor: pointer;}
 body{min-height: 1000px;}
+.navbar-fixed-bottom, .navbar-fixed-top, .navbar-static-top{
+	background: white;
+	z-index: 9999;
+}
 .leftpanel{
     box-shadow: 1px 1px 10px #ccc;
     width: 150px;
