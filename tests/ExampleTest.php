@@ -141,6 +141,24 @@ class ExampleTest extends TestCase
 		echo 'end';
 	}
 
+    public function testTwoyear(){
+        $this->markTestSkipped('geting code spec is ok');
+        DB::table('stDayData')->truncate();
+        $c = Code::where('cdName','=','삼성전자')->first();
+        $c->cdLastUpdate = '';
+        $c->cdOldUpdate = '';
+        $c->cdLastUpdateSise = '';
+        $c->cdOldUpdateSise = '';
+        $c->save();
+        $crawl = new Crawl();
+        $crawl->reset();
+        $result = $crawl->getCodeData($c);
+        $c->saveUpdateDate($crawl->oldestDate, $crawl->lastestDate);
+        $old = \Code::get()->first()->cdOldUpdate;
+        unset($result);
+        $this->assertEquals(true, $old < '150101');
+    }
+
 	public function testDateUpdate(){
 		$this->markTestSkipped('geting code spec is ok');
 

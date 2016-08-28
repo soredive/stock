@@ -14,7 +14,7 @@ interface CrawlInterface {
 class Crawl implements CrawlInterface{
 	protected $baseUrl = 'http://finance.naver.com/item/frgn.nhn';
 	protected $validRow = [3,4,5,6,7,11,12,13,14,15,19,20,21,22,23,27,28,29,30,31];
-	protected $maxTryCnt = 20; // code 는 20페이지까지만
+	protected $maxTryCnt = 1000; // code 는 20페이지까지만 // 이것때문에 1년에서 제한생김 ㅠㅠ
 
 	protected $client;
 	protected $processData;

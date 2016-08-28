@@ -16,7 +16,7 @@ class SiseCrawl /*implements CrawlInterface*/{
 	protected $validRow = [
 		2,3,4,5,6,
 		10,11,12,13,14];
-	protected $maxTryCnt = 100; // code 는 20페이지까지만
+	protected $maxTryCnt = 1000; // code 는 20페이지까지만
 
 	protected $client;
 	protected $processData;
