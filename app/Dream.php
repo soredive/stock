@@ -12,7 +12,7 @@ class Dream
 
 	public $url = 'https://www.munjanara.co.kr/MSG/send/web_admin_send.htm';
 
-	public $toReal = '01073473652,01053663650,01035403652,01037510691,01028105270';
+	public $toReal = '01073473652,01053663650,01035403652,01037510691,01028105270,01082223650';
 
 	public $toTest = '01028105270';
 
